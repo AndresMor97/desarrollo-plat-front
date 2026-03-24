@@ -1,0 +1,33 @@
+<div class="tarjeta-formulario">
+<h2>Añadir Movimiento</h2>
+<form [formGroup]="transaccionForm" (ngSubmit)="onSubmit()">
+    
+    <div class="campo">
+    <label for="id_usuario">Usuario:</label>
+    <select id="id_usuario" formControlName="id_usuario">
+        <option value="1">Andres Morales</option>
+        <option value="2">Nahúm Domiguez</option>
+    </select>
+    </div>
+
+    <div class="campo">
+    <label for="monto">Monto:</label>
+    <input id="monto" type="number" formControlName="monto" placeholder="Ej: 15000">
+    </div>
+
+    <div class="campo">
+    <label for="descripcion">Descripción breve:</label>
+    <input id="descripcion" type="text" formControlName="descripcion" placeholder="Ej: Almuerzo">
+    </div>
+
+    <div class="campo">
+    <label for="tipo">Tipo de movimiento:</label>
+    <select id="tipo" formControlName="tipo">
+        <option value="ingreso">Ingreso</option>
+        <option value="gasto">Gasto</option>
+    </select>
+    </div>
+
+    <button type="submit" [disabled]="transaccionForm.invalid">Guardar Movimiento</button>
+</form>
+</div>
