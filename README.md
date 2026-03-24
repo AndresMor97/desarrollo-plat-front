@@ -792,6 +792,6 @@ describe('SaldoComponent', () => {
 
 **Documentación Técnica Completa del Código**
 
-Generada: 2024 | Angular 19 + TypeScript + RxJS
+Generada: 2026 | Angular 19 + TypeScript + RxJS
 
 </div>
