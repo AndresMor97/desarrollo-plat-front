@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 // Importamos tus componentes recién creados
 import { SaldoComponent } from './demo/pages/saldo/saldo.component'; 
 import { TransaccionComponent } from './demo/pages/transaccion/transaccion.component';
+import { AlertsContainerComponent } from './demo/pages/ui-elements/alerts-container.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   // Agregamos tus componentes al arreglo de imports
-  imports: [CommonModule, SaldoComponent, TransaccionComponent],
+  imports: [CommonModule, SaldoComponent, TransaccionComponent, AlertsContainerComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

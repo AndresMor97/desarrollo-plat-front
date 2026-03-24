@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TransaccionService } from './service/transaccion.service';
 import { UsuarioService } from '../usuario/service/usuario.service.component';
+import { AlertService } from '../saldo/service/alert.service';
 
 @Component({
     selector: 'app-transaccion',
@@ -13,11 +14,13 @@ import { UsuarioService } from '../usuario/service/usuario.service.component';
 })
 export class TransaccionComponent {
     transaccionForm: FormGroup;
+    usuarioActualValue: number = 1;
 
     constructor(
         private fb: FormBuilder, 
         private transaccionService: TransaccionService,
-        private usuarioService: UsuarioService
+        private usuarioService: UsuarioService,
+        private alertService: AlertService
     ) {
         // 1. Agregamos id_usuario al formulario. 
         // Le ponemos '1' como valor por defecto y lo hacemos requerido.
@@ -30,8 +33,12 @@ export class TransaccionComponent {
 
         // Escuchamos cambios en el select de usuario
         this.transaccionForm.get('id_usuario')?.valueChanges.subscribe(usuarioId => {
-            this.usuarioService.setUsuarioActual(Number(usuarioId));
+            this.usuarioActualValue = Number(usuarioId);
+            this.usuarioService.setUsuarioActual(this.usuarioActualValue);
         });
+
+        // Establecer el usuario inicial
+        this.usuarioService.setUsuarioActual(1);
     }
 
     onSubmit() {
@@ -48,13 +55,19 @@ export class TransaccionComponent {
             this.transaccionService.crearTransaccion(nuevaTransaccion).subscribe({
                 next: (res) => {
                     console.log('Respuesta del backend:', res);
-                    alert('Movimiento guardado con éxito');
+                    this.alertService.success('Movimiento guardado con éxito', '¡Éxito!', 3000);
                     // Notificamos que se debe refrescar el saldo
                     this.transaccionService.notificarTransaccionGuardada();
-                    // 3. Al resetear, volvemos a poner los valores por defecto
-                    this.transaccionForm.reset({ id_usuario: 1, tipo: 'ingreso' });
+                    // 3. Al resetear, mantener el usuario actual y solo resetear los otros campos
+                    this.transaccionForm.reset({ 
+                        id_usuario: this.usuarioActualValue, 
+                        tipo: 'ingreso' 
+                    });
                 },
-                error: (err) => console.error('Error al guardar', err)
+                error: (err) => {
+                    console.error('Error al guardar', err);
+                    this.alertService.danger('Error al guardar el movimiento', 'Error', 4000);
+                }
             });
         }
     }
