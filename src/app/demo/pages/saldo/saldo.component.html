@@ -1,4 +1,9 @@
 <div class="tarjeta-saldo">
-    <h3>Mi Saldo Disponible</h3>
-    <h1 class="saldo-destacado">{{ saldoActual | currency:'COP':'symbol':'1.0-0' }}</h1>
+<h3 style="display: flex; align-items: center; gap: 10px;">
+    <span class="material-symbols-outlined">account_balance_wallet</span>
+    Mi Saldo Disponible
+</h3>
+<h1 class="saldo-destacado" [ngClass]="{'positivo': saldoActual >= 0, 'negativo': saldoActual < 0}">
+    {{ saldoActual | currency:'COP':'symbol':'1.0-0' }}
+</h1>
 </div>

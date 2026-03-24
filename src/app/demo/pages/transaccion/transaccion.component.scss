@@ -1,0 +1,87 @@
+/* Contenedor principal del formulario */
+.tarjeta-formulario {
+    display: flex;
+    flex-direction: column;
+
+h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 0.75rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* Espaciado uniforme entre todos los campos */
+}
+}
+
+/* Estilos para cada grupo de etiqueta + input */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+label {
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+input, select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px; /* Bordes redondeados modernos */
+    font-size: 1rem;
+    color: #2d3748;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    outline: none;
+
+    /* Efecto cuando el usuario hace clic en el campo (Focus) */
+    &:focus {
+        background-color: #ffffff;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15); /* Anillo de luz azul */
+    }
+}
+
+  /* Pequeño ajuste visual para el select */
+    select {
+    cursor: pointer;
+}
+}
+
+/* Estilos del botón de Guardar */
+button {
+    margin-top: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    background-color: #38a169; /* Verde finanzas */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(56, 161, 105, 0.2);
+
+  /* Efecto al pasar el ratón por encima */
+    &:hover:not(:disabled) {
+    background-color: #2f855a;
+    transform: translateY(-2px); /* Se levanta un poquito */
+    box-shadow: 0 6px 8px rgba(56, 161, 105, 0.3);
+}
+
+  /* Estilo cuando el formulario es inválido (Botón bloqueado) */
+    &:disabled {
+    background-color: #a0aec0;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+}
+}

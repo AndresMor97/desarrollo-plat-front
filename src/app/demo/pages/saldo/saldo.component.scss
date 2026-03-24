@@ -1,0 +1,42 @@
+.tarjeta-saldo {
+  /* Forzamos tu tipografía favorita */
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 2rem 1rem;
+
+/* Un fondo sutilmente diferente al blanco puro si lo deseas, 
+     o lo dejamos transparente para que herede el panel principal */
+background: transparent;
+
+h3 {
+    color: #718096; /* Un gris elegante y no tan agresivo como el negro */
+    font-size: 1.1rem;
+    text-transform: uppercase; /* Letras en mayúscula para darle formalidad */
+    letter-spacing: 1.5px; /* Separamos un poco las letras */
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+    font-weight: 500;
+}
+
+.saldo-destacado {
+    font-size: 3.5rem; /* Un número bien grande para que sea lo primero que veas */
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.05); /* Sombra muy suave para darle profundidad */
+    transition: color 0.3s ease; /* Transición suave si el saldo cambia */
+}
+
+  /* Clases dinámicas que inyectamos desde el HTML */
+.positivo {
+    color: #38a169; /* Verde finanzas */
+}
+
+.negativo {
+    color: #e53e3e; /* Rojo alerta */
+}
+}

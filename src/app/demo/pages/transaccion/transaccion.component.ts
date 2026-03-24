@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TransaccionService } from './service/transaccion.service';
+import { UsuarioService } from '../usuario/service/usuario.service.component';
 
 @Component({
     selector: 'app-transaccion',
@@ -13,7 +14,11 @@ import { TransaccionService } from './service/transaccion.service';
 export class TransaccionComponent {
     transaccionForm: FormGroup;
 
-    constructor(private fb: FormBuilder, private transaccionService: TransaccionService) {
+    constructor(
+        private fb: FormBuilder, 
+        private transaccionService: TransaccionService,
+        private usuarioService: UsuarioService
+    ) {
         // 1. Agregamos id_usuario al formulario. 
         // Le ponemos '1' como valor por defecto y lo hacemos requerido.
         this.transaccionForm = this.fb.group({
@@ -21,6 +26,11 @@ export class TransaccionComponent {
             monto: ['', [Validators.required, Validators.min(0.01)]],
             descripcion: [''],
             tipo: ['ingreso', Validators.required] 
+        });
+
+        // Escuchamos cambios en el select de usuario
+        this.transaccionForm.get('id_usuario')?.valueChanges.subscribe(usuarioId => {
+            this.usuarioService.setUsuarioActual(Number(usuarioId));
         });
     }
 
@@ -39,6 +49,8 @@ export class TransaccionComponent {
                 next: (res) => {
                     console.log('Respuesta del backend:', res);
                     alert('Movimiento guardado con éxito');
+                    // Notificamos que se debe refrescar el saldo
+                    this.transaccionService.notificarTransaccionGuardada();
                     // 3. Al resetear, volvemos a poner los valores por defecto
                     this.transaccionForm.reset({ id_usuario: 1, tipo: 'ingreso' });
                 },
