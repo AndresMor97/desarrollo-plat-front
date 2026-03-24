@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { TransaccionService } from './service/transaccion.service';
 import { UsuarioService } from '../usuario/service/usuario.service.component';
 import { AlertService } from '../saldo/service/alert.service';
+import { Usuario } from '../usuario/models/usuario';
 
 @Component({
     selector: 'app-transaccion',
@@ -15,6 +16,7 @@ import { AlertService } from '../saldo/service/alert.service';
 export class TransaccionComponent {
     transaccionForm: FormGroup;
     usuarioActualValue: number = 1;
+    usuarios: Usuario[] = [];
 
     constructor(
         private fb: FormBuilder, 
@@ -39,6 +41,23 @@ export class TransaccionComponent {
 
         // Establecer el usuario inicial
         this.usuarioService.setUsuarioActual(1);
+
+        // Cargar la lista de usuarios desde el servicio
+        this.usuarioService.getUsuarios().subscribe({
+            next: (data) => {
+                console.log('Datos del API:', data);
+                // El API retorna en data.result
+                if (data && data.result && Array.isArray(data.result)) {
+                    this.usuarios = data.result;
+                    console.log('Usuarios cargados:', this.usuarios);
+                } else {
+                    console.error('Formato inesperado del API:', data);
+                }
+            },
+            error: (err) => {
+                console.error('Error al cargar usuarios', err);
+            }
+        });
     }
 
     onSubmit() {
