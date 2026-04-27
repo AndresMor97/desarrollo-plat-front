@@ -1,7 +1,6 @@
 export interface Transaccion {
-    id_usuario: number;
     monto: number;
     descripcion: string;
-    tipo: string;
+    tipo: 'ingreso' | 'gasto';
     id_categoria: number;
 }
