@@ -1,87 +1,178 @@
-/* Contenedor principal del formulario */
-.tarjeta-formulario {
-    display: flex;
-    flex-direction: column;
+.form-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  margin: 16px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+}
 
-h2 {
-    margin-top: 0;
-    color: #2c3e50;
+.form-header {
+  margin-bottom: 24px;
+
+  h2 {
     font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid #edf2f7;
-    padding-bottom: 0.75rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #86868b;
+    margin: 0;
+  }
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem; /* Espaciado uniforme entre todos los campos */
-}
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* Estilos para cada grupo de etiqueta + input */
+.tipo-selector {
+  display: flex;
+  gap: 8px;
+  background: #f5f5f7;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.tipo-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #86868b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .material-symbols-outlined {
+    font-size: 18px;
+  }
+
+  &.active {
+    background: #ffffff;
+    color: #1d1d1f;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  &.gasto.active {
+    color: #ff3b30;
+  }
+}
+
 .campo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-label {
-    font-weight: 600;
-    color: #4a5568;
-    font-size: 0.9rem;
+  label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #86868b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
 }
 
-input, select {
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px; /* Bordes redondeados modernos */
-    font-size: 1rem;
-    color: #2d3748;
-    background-color: #f8fafc;
-    transition: all 0.3s ease;
-    outline: none;
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 
-    /* Efecto cuando el usuario hace clic en el campo (Focus) */
-    &:focus {
-        background-color: #ffffff;
-        border-color: #4299e1;
-        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15); /* Anillo de luz azul */
-    }
-}
+  .input-prefix {
+    position: absolute;
+    left: 14px;
+    font-size: 1.1rem;
+    color: #86868b;
+    pointer-events: none;
+  }
 
-  /* Pequeño ajuste visual para el select */
-    select {
-    cursor: pointer;
-}
-}
-
-/* Estilos del botón de Guardar */
-button {
-    margin-top: 0.5rem;
-    padding: 0.85rem 1.5rem;
-    background-color: #38a169; /* Verde finanzas */
-    color: white;
+  input {
+    width: 100%;
+    padding: 14px 14px 14px 32px;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(56, 161, 105, 0.2);
+    border-bottom: 1.5px solid #d2d2d7;
+    background: transparent;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1d1d1f;
+    transition: border-color 0.2s ease;
+    border-radius: 0;
 
-  /* Efecto al pasar el ratón por encima */
-    &:hover:not(:disabled) {
-    background-color: #2f855a;
-    transform: translateY(-2px); /* Se levanta un poquito */
-    box-shadow: 0 6px 8px rgba(56, 161, 105, 0.3);
+    &:focus {
+      outline: none;
+      border-bottom-color: #27ae60;
+    }
+
+    &::placeholder {
+      color: #d2d2d7;
+    }
+  }
 }
 
-  /* Estilo cuando el formulario es inválido (Botón bloqueado) */
-    &:disabled {
-    background-color: #a0aec0;
-    box-shadow: none;
+input:not([type="number"]), select {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-bottom: 1.5px solid #d2d2d7;
+  background: transparent;
+  font-size: 1rem;
+  color: #1d1d1f;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #27ae60;
+  }
+
+  &::placeholder {
+    color: #d2d2d7;
+  }
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2386868b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  padding-right: 24px;
+}
+
+.btn-guardar {
+  margin-top: 8px;
+  padding: 16px;
+  background: #27ae60;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #229954;
+    transform: scale(1.01);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  &:disabled {
+    background: #d2d2d7;
     cursor: not-allowed;
-    opacity: 0.7;
-    transform: none;
-}
+  }
 }
