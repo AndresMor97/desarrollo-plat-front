@@ -1,0 +1,48 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <span class="emoji-icon">💰</span>
+      <h1>My Money</h1>
+      <p>Inicia sesión para continuar</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="campo">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="tu@email.com"
+          autocomplete="email">
+      </div>
+
+      <div class="campo">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="••••••••"
+          autocomplete="current-password">
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn-login"
+        [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="!isLoading">Iniciar Sesión</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+
+    <div class="registro-link">
+      <span>¿No tienes cuenta?</span>
+      <button type="button" routerLink="/registro">Regístrate</button>
+    </div>
+  </div>
+</div>
