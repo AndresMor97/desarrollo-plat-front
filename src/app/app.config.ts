@@ -1,14 +1,19 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
-
-// 1. Importa la función proveedora del cliente HTTP
-import { provideHttpClient } from '@angular/common/http';
+import { AuthInterceptor } from './demo/pages/auth/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    // 2. Ejecuta la función dentro de la lista de providers
-    provideHttpClient() 
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ]
 };
