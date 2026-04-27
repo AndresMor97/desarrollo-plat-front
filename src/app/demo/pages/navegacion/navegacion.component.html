@@ -1,0 +1,65 @@
+<app-alerts-container></app-alerts-container>
+
+<header class="app-header">
+  <div class="header-content">
+    <div class="user-info">
+      <span class="user-name">{{ usuarioNombre }}</span>
+    </div>
+    <h1 class="app-titulo">💰 My Money</h1>
+    <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
+      <span class="material-symbols-outlined">logout</span>
+    </button>
+  </div>
+</header>
+
+<main class="contenido-seccion">
+  <section *ngIf="seccionActiva === 'movimiento'" class="seccion">
+    <app-transaccion></app-transaccion>
+  </section>
+
+  <section *ngIf="seccionActiva === 'saldo'" class="seccion">
+    <app-saldo></app-saldo>
+  </section>
+
+  <section *ngIf="seccionActiva === 'historial'" class="seccion">
+    <app-historial></app-historial>
+  </section>
+
+  <section *ngIf="seccionActiva === 'estadisticas'" class="seccion">
+    <app-estadisticas></app-estadisticas>
+  </section>
+</main>
+
+<nav class="navegacion">
+  <button
+    class="nav-btn"
+    [class.active]="seccionActiva === 'movimiento'"
+    (click)="cambiarSeccion('movimiento')">
+    <span class="material-symbols-outlined">add_card</span>
+    <span>Agregar</span>
+  </button>
+
+  <button
+    class="nav-btn"
+    [class.active]="seccionActiva === 'saldo'"
+    (click)="cambiarSeccion('saldo')">
+    <span class="material-symbols-outlined">account_balance_wallet</span>
+    <span>Saldo</span>
+  </button>
+
+  <button
+    class="nav-btn"
+    [class.active]="seccionActiva === 'historial'"
+    (click)="cambiarSeccion('historial')">
+    <span class="material-symbols-outlined">receipt_long</span>
+    <span>Historial</span>
+  </button>
+
+  <button
+    class="nav-btn"
+    [class.active]="seccionActiva === 'estadisticas'"
+    (click)="cambiarSeccion('estadisticas')">
+    <span class="material-symbols-outlined">pie_chart</span>
+    <span>Estadísticas</span>
+  </button>
+</nav>
