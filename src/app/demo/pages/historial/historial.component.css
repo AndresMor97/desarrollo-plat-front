@@ -1,0 +1,91 @@
+.historial-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.01em;
+  }
+}
+
+.cargando, .vacio {
+  text-align: center;
+  color: #86868b;
+  padding: 40px 20px;
+  font-size: 0.9rem;
+}
+
+.lista-movimientos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.movimiento-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  &.gasto .movimiento-icono {
+    background: #fff2f2;
+    color: #ff3b30;
+  }
+
+  &.ingreso .movimiento-icono {
+    background: #edfcf0;
+    color: #27ae60;
+  }
+}
+
+.movimiento-icono {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+}
+
+.movimiento-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.movimiento-desc {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1d1d1f;
+}
+
+.movimiento-fecha {
+  font-size: 0.8rem;
+  color: #86868b;
+}
+
+.movimiento-monto {
+  font-size: 1rem;
+  font-weight: 600;
+
+  &.monto-gasto {
+    color: #ff3b30;
+  }
+
+  &.monto-ingreso {
+    color: #27ae60;
+  }
+}

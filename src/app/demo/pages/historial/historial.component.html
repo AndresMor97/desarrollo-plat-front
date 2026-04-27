@@ -1,0 +1,33 @@
+<div class="historial-container">
+  <h2>Historial</h2>
+
+  <div *ngIf="cargando" class="cargando">Cargando...</div>
+
+  <div *ngIf="!cargando && transacciones.length === 0" class="vacio">
+    No hay movimientos registrados.
+  </div>
+
+  <div class="lista-movimientos" *ngIf="transacciones.length > 0">
+    <div
+      *ngFor="let t of transacciones"
+      class="movimiento-item"
+      [class.gasto]="t.tipo === 'gasto'"
+      [class.ingreso]="t.tipo === 'ingreso'">
+
+      <div class="movimiento-icono">
+        <span class="material-symbols-outlined">
+          {{ t.tipo === 'gasto' ? 'trending_down' : 'trending_up' }}
+        </span>
+      </div>
+
+      <div class="movimiento-info">
+        <span class="movimiento-desc">{{ t.descripcion }}</span>
+        <span class="movimiento-fecha">{{ formatearFecha(t.fecha) }} · {{ t.categoria }}</span>
+      </div>
+
+      <div class="movimiento-monto" [ngClass]="t.tipo === 'gasto' ? 'monto-gasto' : 'monto-ingreso'">
+        {{ t.tipo === 'gasto' ? '-' : '+' }}{{ t.monto | currency:'COP':'symbol':'1.0-0' }}
+      </div>
+    </div>
+  </div>
+</div>
