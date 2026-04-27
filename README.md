@@ -1,331 +1,638 @@
-# 💰 DesolloPlatFront - Plataforma de Gestión Financiera
+# 💰 FinanzasApp - Guía Completa para Desarrolladores
+
+> **¿Primera vez viendo Angular? ¿No sabes qué es RxJS? Tranquilo, esta documentación te explica TODO como si nunca hubieras programado.**
+
+---
 
 <div align="center">
 
-![Angular](https://img.shields.io/badge/Angular-19.0.6-red?style=flat-square&logo=angular)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.6.2-blue?style=flat-square&logo=typescript)
-![RxJS](https://img.shields.io/badge/RxJS-7.8.0-critical?style=flat-square&logo=reactivex)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+![Angular](https://img.shields.io/badge/Angular-19-red?style=for-the-badge&logo=angular)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript)
+![RxJS](https://img.shields.io/badge/RxJS-7.8-critical?style=for-the-badge&logo=reactivex)
 
-**Documentación técnica completa del código fuente**
+**Aplicación Frontend de Gestión Financiera Personal**
 
-[Instalación](#-instalación-y-configuración) • [Componentes](#-componentes-detallados) • [Servicios](#-servicios) • [API](#-endpoints-api-esperados)
+Backend esperado: Flask/Python en `http://localhost:5000`
 
 </div>
 
 ---
 
-## 📋 Descripción General
+## 📑 Tabla de Contenidos
 
-DesolloPlatFront es una aplicación **ESTRICTAMENTE frontend** construida con **Angular 19** que gestiona:
-- 👤 **Usuarios**: Carga, selección y administración de perfiles
-- 💳 **Transacciones**: Registro de ingresos/gastos con categorización
-- 💰 **Saldos**: Visualización y actualización en tiempo real
-- 🎨 **UI Components**: Alertas, badges y componentes personalizados
+1. [¿Qué es esta aplicación?](#qué-es-esta-aplicación)
+2. [Arquitectura General](#arquitectura-general)
+3. [Estructura de Carpetas](#estructura-de-carpetas)
+4. [Guía para Principiantes](#guía-para-principiantes)
+5. [Componentes (Explicados)](#componentes-explicados)
+6. [Servicios (Explicados)](#servicios-explicados)
+7. [Modelos de Datos](#modelos-de-datos)
+8. [Flujo de la Aplicación](#flujo-de-la-aplicación)
+9. [Rutas y Navegación](#rutas-y-navegación)
+10. [API del Backend](#api-del-backend)
+11. [Instalación y Ejecución](#instalación-y-ejecución)
+12. [Glosario de Términos](#glosario-de-términos)
 
 ---
 
-## 🚀 Instalación y Configuración
+## 🎯 ¿Qué es esta aplicación?
 
-### Requisitos
-- Node.js 18+
-- npm o yarn
-- Backend en `http://localhost:5000` (Flask/Python)
+**FinanzasApp** es una aplicación web que te permite:
 
-### Pasos
-```bash
-# 1. Instalar dependencias
-npm install
+- ✅ **Registrarte e Iniciar Sesión** - Crear cuenta y acceder de forma segura
+- ✅ **Registrar Dinero** - Agregar ingresos y gastos con descripción
+- ✅ **Ver tu Saldo** - Consultar cuánto dinero tienes disponible
+- ✅ **Ver Historial** - Revisar todas tus transacciones pasadas
+- ✅ **Ver Estadísticas** - Gráfico de pastel mostrando en qué gastas más
 
-# 2. Iniciar servidor desarrollo (puerto 4200)
-npm start
+### Tecnologías Usadas
 
-# 3. Ejecutar tests
-npm test
+| Tecnología | ¿Qué es? | ¿Para qué sirve? |
+|------------|----------|------------------|
+| **Angular 19** | Framework de JavaScript | Herramienta para construir páginas web interactivas |
+| **TypeScript** | JavaScript con tipos | Hace el código más seguro y fácil de entender |
+| **RxJS** | Librería de reactividad | Permite que los componentes se comuniquen entre sí |
+| **Chart.js** | Librería de gráficos | Muestra las estadísticas en un gráfico de pastel |
+| **SCSS/CSS** | Estilos | Da color y diseño a la aplicación |
 
-# 4. Build producción
-npm run build
+---
+
+## 🏗️ Arquitectura General
+
+### ¿Cómo está organizada la aplicación?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      NAVEGADOR WEB                          │
+│  (Lo que ve el usuario: login, botones, gráficos, etc.)    │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    ANGULAR (Frontend)                        │
+│                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │ COMPONENTES │  │  SERVICIOS  │  │   RUTAS     │         │
+│  │ (Visuales)  │  │  (Lógica)   │  │(Navegación) │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
+│         │                │                │                 │
+│         └────────────────┼────────────────┘                 │
+│                          │                                  │
+│                          ▼                                  │
+│              ┌───────────────────────┐                     │
+│              │   HttpClient (API)    │                     │
+│              │   Hace peticiones HTTP │                     │
+│              └───────────────────────┘                     │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 BACKEND: Flask (Puerto 5000)                 │
+│              (Recibe peticiones, procesa, responde)         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Conceptos Clave
+
+1. **Componente**: Es una "pantalla" o parte visual de la aplicación. Ejemplo: el formulario de login.
+
+2. **Servicio**: Es una clase que maneja la lógica de negocio (conectar al API, guardar datos).
+
+3. **RxJS/BehaviorSubject**: Forma en que los componentes se comunican sin estar directamente conectados.
+
+4. **Lazy Loading**: Las páginas se cargan solo cuando el usuario las necesita.
+
+---
+
+## 📁 Estructura de Carpetas
+
+```
+Front/
+│
+├── angular.json              # ⚙️ Configuración de Angular (cómo compilar)
+├── package.json              # 📦 Lista de dependencias npm
+├── tsconfig.json             # 🔧 Configuración de TypeScript
+├── src/                      # 📂 Código fuente principal
+│   ├── index.html            # 📄 HTML principal (punto de entrada)
+│   ├── main.ts               # 🚀 Código que inicia la aplicación
+│   ├── styles.css            # 🎨 Estilos globales (afectan a todo)
+│   └── app/                  # 💻 Toda la lógica de la aplicación
+│       │
+│       ├── app.component.ts      # 🏠 Componente raíz (padre de todo)
+│       ├── app.config.ts          # ⚙️ Configuración de providers
+│       ├── app.routes.ts          # 🛣️ Definición de rutas
+│       ├── auth.guard.ts          # 🔒 Protege rutas (solo usuarios logueados)
+│       │
+│       └── demo/pages/            # 📂 MODULOS DE PÁGINAS
+│           │
+│           ├── auth/               # 🔐 MÓDULO DE AUTENTICACIÓN
+│           │   ├── auth.interceptor.ts  # Agrega token a peticiones HTTP
+│           │   ├── login/                 # 📝 Página de inicio de sesión
+│           │   ├── registro/              # 📝 Página de registro
+│           │   └── service/auth.service.ts    # Lógica de autenticación
+│           │
+│           ├── navegacion/          # 🧭 LAYOUT PRINCIPAL (post-login)
+│           │   ├── navegacion.component.ts    # Barra de navegación + secciones
+│           │   ├── navegacion.component.html
+│           │   └── navegacion.component.css
+│           │
+│           ├── transaccion/         # 💳 MÓDULO DE TRANSACCIONES
+│           │   ├── transaccion.component.*   # Formulario de registro
+│           │   ├── service/transaccion.service.ts
+│           │   └── models/transaccion.ts
+│           │
+│           ├── saldo/               # 💰 MÓDULO DE SALDO
+│           │   ├── saldo.component.*     # Muestra el saldo actual
+│           │   ├── service/saldo.service.ts
+│           │   ├── service/alert.service.ts   # Sistema de alertas
+│           │   └── models/saldo.ts
+│           │
+│           ├── historial/           # 📜 MÓDULO DE HISTORIAL
+│           │   ├── historial.component.*   # Lista de transacciones
+│           │   └── historial.component.css
+│           │
+│           ├── estadisticas/         # 📊 MÓDULO DE ESTADÍSTICAS
+│           │   ├── estadisticas.component.*   # Gráfico de pastel
+│           │   └── estadisticas.component.css
+│           │
+│           ├── usuario/              # 👤 MÓDULO DE USUARIO (en desarrollo)
+│           │   ├── usuario.component.*
+│           │   ├── service/usuario.service.component.ts
+│           │   └── models/usuario.ts
+│           │
+│           ├── categorias/          # 🏷️ MODELOS DE CATEGORÍAS
+│           │   └── models/categorias.ts
+│           │
+│           └── ui-elements/         # 🎨 COMPONENTES REUTILIZABLES
+│               ├── alert.component.*      # Una alerta individual
+│               └── alerts-container.component.*  # Contenedor de alertas
 ```
 
 ---
 
-## 📁 Estructura del Proyecto Detallada
+## 📚 Guía para Principiantes
 
-```
-src/app/demo/pages/
-├── saldo/                          # 💰 MÓDULO DE SALDOS
-│   ├── models/
-│   │   └── saldo.ts                # Interfaz: { total: number }
-│   ├── service/
-│   │   ├── saldo.service.ts        # HTTP → GET /api/saldo?id_usuario=X
-│   │   └── alert.service.ts        # Notificaciones (success/danger/warning/info)
-│   ├── saldo.component.ts          # Lógica: obtener saldo, escuchar cambios
-│   ├── saldo.component.html        # Template: mostrar saldo con currency pipe
-│   └── saldo.component.scss        # Estilos: tarjeta y colores
-│
-├── transaccion/                    # 💳 MÓDULO DE TRANSACCIONES
-│   ├── models/
-│   │   └── transaccion.ts          # Interfaz: id_usuario, monto, descripcion, tipo, id_categoria
-│   ├── service/
-│   │   └── transaccion.service.ts  # HTTP → POST /api/transacciones + Subject notificaciones
-│   ├── transaccion.component.ts    # Formulario reactivo con validaciones
-│   ├── transaccion.component.html  # Select usuarios, inputs, botón submit
-│   └── transaccion.component.scss  # Estilos: formulario y campos
-│
-├── usuario/                        # 👤 MÓDULO DE USUARIOS
-│   ├── models/
-│   │   └── usuario.ts              # Interfaz: id_usuario, nombre, etc.
-│   ├── service/
-│   │   └── usuario.service.component.ts  # BehaviorSubject usuarioActual$, HTTP → GET /api/usuarios
-│   ├── usuario.component.ts        # Cargar usuarios, actualizar seleccionado
-│   ├── usuario.component.html      # Listado o selector de usuarios
-│   └── usuario.component.scss      # Estilos: layout usuario
-│
-└── ui-elements/                    # 🎨 COMPONENTES REUTILIZABLES
-    ├── alert.component.ts          # Muestra alertas individuales
-    ├── alerts-container.component.ts # Contenedor de múltiples alertas
-    ├── basic-badge.component.ts    # Badge visual (etiquetas)
-    ├── basic-badge.component.html
-    └── basic-badge.component.scss
+### ¿Qué es Angular?
+
+**Angular** es un framework (herramienta) creado por Google para construir aplicaciones web de una sola página (SPA - Single Page Application).
+
+Imagina que Angular es como un **kit de construcción**:
+
+- Te da piezas pre-hechas (componentes)
+- Te ayuda a organizarte (módulos)
+- Te facilita la comunicación entre piezas (services)
+- Maneja la navegación sin recargar la página (router)
+
+### ¿Qué es TypeScript?
+
+**TypeScript** es JavaScript mejorado. Agrega "tipos" a las variables.
+
+```javascript
+// JavaScript (sin tipos)
+let saldo = 1000;
+saldo = "mil pesos"; // Esto funciona, pero puede causar errores
+
+// TypeScript (con tipos)
+let saldo: number = 1000;
+saldo = "mil pesos"; // ❌ Error! TypeScript dice que esto no tiene sentido
 ```
 
----
+### ¿Qué es RxJS?
 
-## 🔍 Componentes Detallados
+**RxJS** es una librería que ayuda a manejar datos que "fluyen" con el tiempo.
 
-### 1️⃣ **SaldoComponent** (`saldo/saldo.component.ts`)
+Ejemplo de la vida real: Las notificaciones de tu teléfono.
 
-#### Propósito
-Mostrar el saldo actual del usuario activo y actualizarlo en tiempo real.
+- No sabes cuándo llegará una notificación
+- Pero cuando llega, tu teléfono reacciona
+- RxJS hace algo similar: "observable" = la notificación, "subscriber" = tu reacción
 
-#### Propiedades
 ```typescript
-saldoActual: number = 0;          // Saldo mostrado en pantalla
-usuarioActual: number = 2;        // ID del usuario activo
-private destroy$ = new Subject<void>(); // Para limpiar suscripciones
-```
-
-#### Métodos Principales
-
-**`ngOnInit()`**
-```typescript
-// Se ejecuta cuando el componente carga
-// 1. Escucha cambios del usuario activo
-this.usuarioService.usuarioActual$.pipe(takeUntil(this.destroy$))
-  .subscribe(usuarioId => {
-    this.usuarioActual = usuarioId;
-    this.obtenerSaldo(); // Recarga saldo al cambiar usuario
+// Ejemplo simple:
+miServicio.datos$  // El $ indica que es un observable (flujo de datos)
+  .subscribe(dato => {
+    // Esta función se ejecuta cada vez que llega un nuevo dato
+    console.log('Llegó:', dato);
   });
-
-// 2. Escucha notificaciones de transacciones guardadas
-this.transaccionService.transaccionGuardada$.pipe(takeUntil(this.destroy$))
-  .subscribe(() => {
-    this.obtenerSaldo(); // Recarga saldo tras guardar movimiento
-  });
-
-// 3. Obtiene el saldo inicial
-this.obtenerSaldo();
 ```
 
-**`obtenerSaldo()`**
+### ¿Qué es un BehaviorSubject?
+
+Es un tipo especial de observable que **siempre tiene un valor** (aunque no haya nadie escuchando).
+
+Piensa en él como una **variable que avisa cuando cambia**.
+
 ```typescript
-// Llama al servicio para obtener saldo del usuario actual
-this.saldoService.getSaldo(this.usuarioActual).subscribe({
-  next: (res) => {
-    if (res.status === 'success') {
-      this.saldoActual = res.result.saldo_actual; // Estructura esperada del backend
-    }
-  },
-  error: (err) => console.error('Error al obtener el saldo', err)
+// Crear un BehaviorSubject con valor inicial 2
+private usuarioActual = new BehaviorSubject<number>(2);
+
+// Cualquier componente puede "suscribirse" y será notificado cuando cambie
+this.usuarioActual.subscribe(id => {
+  console.log('El usuario cambió a:', id);
 });
-```
 
-**`ngOnDestroy()`**
-```typescript
-// Limpia suscripciones antes de destruir el componente
-this.destroy$.next();
-this.destroy$.complete();
-```
-
-#### Template HTML
-```html
-<div class="tarjeta-saldo">
-  <h3>
-    <span>account_balance_wallet</span> Mi Saldo Disponible
-  </h3>
-  <!-- Mostrar saldo con formato moneda COP -->
-  <h1 [ngClass]="{'positivo': saldoActual >= 0, 'negativo': saldoActual < 0}">
-    {{ saldoActual | currency:'COP':'symbol':'1.0-0' }}
-  </h1>
-</div>
+// Cambiar el valor - TODOS los suscriptores serán notificados
+this.usuarioActual.next(5); // Output: "El usuario cambió a: 5"
 ```
 
 ---
 
-### 2️⃣ **TransaccionComponent** (`transaccion/transaccion.component.ts`)
+## 🧩 Componentes Explicados
 
-#### Propósito
-Formulario para crear nuevas transacciones (ingresos/gastos).
+> **¿Qué es un componente?** Es una clase de TypeScript que controla una parte de la pantalla HTML. Cada componente tiene:
+> - `.ts` - La lógica (qué hace)
+> - `.html` - El template (qué se ve)
+> - `.css/scss` - Los estilos (cómo se ve)
 
-#### Propiedades
-```typescript
-transaccionForm: FormGroup;       // Formulario reactivo
-usuarioActualValue: number = 1;   // Usuario seleccionado en el form
-usuarios: Usuario[] = [];         // Lista de usuarios cargados
+---
+
+### 1️⃣ LoginComponent (`auth/login/`)
+
+**¿Qué hace?** Permite al usuario iniciar sesión.
+
+**Flujo:**
+```
+Usuario escribe email + password
+        ↓
+Usuario hace click en "Ingresar"
+        ↓
+AuthService.login() envía datos al backend
+        ↓
+Backend responde con token
+        ↓
+Token se guarda en localStorage (memoria del navegador)
+        ↓
+NavegacionComponent se muestra
 ```
 
-#### Constructor y Inicialización
+**Código clave:**
 ```typescript
-constructor(
-  private fb: FormBuilder,
-  private transaccionService: TransaccionService,
-  private usuarioService: UsuarioService,
-  private alertService: AlertService
-) {
-  // Crear formulario con validaciones
-  this.transaccionForm = this.fb.group({
-    id_usuario: [1, Validators.required],
-    monto: ['', [Validators.required, Validators.min(0.01)]],
-    descripcion: [''],
-    tipo: ['ingreso', Validators.required]
-  });
+// src/app/demo/pages/auth/login/login.component.ts
 
-  // Escuchar cambios en el selector de usuario
-  this.transaccionForm.get('id_usuario')?.valueChanges.subscribe(usuarioId => {
-    this.usuarioActualValue = Number(usuarioId);
-    this.usuarioService.setUsuarioActual(this.usuarioActualValue);
-  });
-
-  // Establecer usuario inicial
-  this.usuarioService.setUsuarioActual(1);
-
-  // Cargar lista de usuarios
-  this.usuarioService.getUsuarios().subscribe({
-    next: (data) => {
-      if (data?.result && Array.isArray(data.result)) {
-        this.usuarios = data.result;
-      }
-    },
-    error: (err) => console.error('Error al cargar usuarios', err)
-  });
-}
-```
-
-#### Método onSubmit()
-```typescript
 onSubmit() {
-  if (this.transaccionForm.valid) {
-    const nuevaTransaccion = {
-      id_usuario: Number(this.transaccionForm.value.id_usuario),
-      monto: this.transaccionForm.value.monto,
-      descripcion: this.transaccionForm.value.descripcion,
-      tipo: this.transaccionForm.value.tipo,
-      id_categoria: 3 // Categoría fija por ahora
-    };
-    
-    this.transaccionService.crearTransaccion(nuevaTransaccion).subscribe({
+  // Validar que el formulario esté completo
+  if (this.loginForm.valid) {
+    this.isLoading = true; // Mostrar indicador de carga
+
+    // Llamar al servicio de autenticación
+    this.authService.login(this.loginForm.value).subscribe({
       next: (res) => {
-        // Mostrar alerta de éxito
-        this.alertService.success('Movimiento guardado con éxito', '¡Éxito!', 3000);
-        
-        // Notificar para actualizar saldo
-        this.transaccionService.notificarTransaccionGuardada();
-        
-        // Resetear formulario manteniendo el usuario actual
-        this.transaccionForm.reset({
-          id_usuario: this.usuarioActualValue,
-          tipo: 'ingreso'
-        });
+        // Guardar token en el navegador
+        localStorage.setItem('auth_token', res.result.token);
+        localStorage.setItem('auth_nombre', res.result.nombre);
+
+        // Ir a la página principal
+        this.router.navigate(['/home']);
       },
-      error: (err) => console.error('Error:', err)
+      error: (err) => {
+        this.errorMessage = 'Email o contraseña incorrectos';
+        this.isLoading = false;
+      }
     });
   }
 }
 ```
 
-#### Validaciones del Formulario
-| Campo | Validación | Valor Default |
-|-------|-----------|---|
-| `id_usuario` | Requerido | 1 |
-| `monto` | Requerido, ≥ 0.01 | Vacío |
-| `descripcion` | Opcional | Vacío |
-| `tipo` | Requerido | 'ingreso' |
+---
 
-#### Template HTML
+### 2️⃣ NavegacionComponent (`navegacion/`)
+
+**¿Qué hace?** Es el **layout principal** después de hacer login. Contiene:
+
+- Una barra de navegación inferior con 4 secciones
+- Rendering condicional de componentes según la sección activa
+
+**Secciones disponibles:**
+
+| Sección | Icono | Componente Mostrado |
+|---------|-------|---------------------|
+| Movimiento | 💰 | TransaccionComponent |
+| Saldo | 💳 | SaldoComponent |
+| Historial | 📜 | HistorialComponent |
+| Estadísticas | 📊 | EstadisticasComponent |
+
+**¿Cómo funciona el cambio de sección?**
+
+```typescript
+// src/app/demo/pages/navegacion/navegacion.component.ts
+
+// Tipo de sección válida
+type SeccionActiva = 'movimiento' | 'saldo' | 'historial' | 'estadisticas';
+
+// Sección que se está mostrando actualmente
+seccionActiva: SeccionActiva = 'movimiento';
+
+// Método para cambiar de sección
+mostrarSeccion(seccion: SeccionActiva) {
+  this.seccionActiva = seccion; // Angular detecta el cambio y actualiza el HTML
+}
+```
+
+**Template (HTML):**
 ```html
-<form [formGroup]="transaccionForm" (ngSubmit)="onSubmit()">
-  <!-- Select de usuario -->
-  <select id="id_usuario" formControlName="id_usuario">
-    <option *ngFor="let usuario of usuarios" [value]="usuario.id_usuario">
-      {{ usuario.nombre }}
-    </option>
-  </select>
+<!-- Barra de navegación inferior -->
+<nav class="navbar">
+  <button (click)="mostrarSeccion('movimiento')">💰 Movimiento</button>
+  <button (click)="mostrarSeccion('saldo')">💳 Saldo</button>
+  <button (click)="mostrarSeccion('historial')">📜 Historial</button>
+  <button (click)="mostrarSeccion('estadisticas')">📊 Estadísticas</button>
+</nav>
 
-  <!-- Input monto -->
-  <input id="monto" type="number" formControlName="monto" placeholder="Ej: 15000">
-
-  <!-- Input descripción -->
-  <input id="descripcion" type="text" formControlName="descripcion" placeholder="Ej: Almuerzo">
-
-  <!-- Select tipo -->
-  <select id="tipo" formControlName="tipo">
-    <option value="ingreso">Ingreso</option>
-    <option value="gasto">Gasto</option>
-  </select>
-
-  <!-- Botón submit deshabilitado si form inválido -->
-  <button type="submit" [disabled]="transaccionForm.invalid">
-    Guardar Movimiento
-  </button>
-</form>
+<!-- Área donde se muestra el componente activo -->
+<div class="contenido">
+  @if (seccionActiva === 'movimiento') {
+    <app-transaccion />
+  }
+  @if (seccionActiva === 'saldo') {
+    <app-saldo />
+  }
+  @if (seccionActiva === 'historial') {
+    <app-historial />
+  }
+  @if (seccionActiva === 'estadisticas') {
+    <app-estadisticas />
+  }
+</div>
 ```
 
 ---
 
-### 3️⃣ **UsuarioComponent** (`usuario/usuario.component.ts`)
+### 3️⃣ TransaccionComponent (`transaccion/`)
 
-#### Propósito
-Cargar y gestionar la lista de usuarios de la aplicación.
+**¿Qué hace?** Formulario para registrar ingresos y gastos.
 
-#### Propiedades
+**Campos del formulario:**
+
+| Campo | Tipo | Validación | Ejemplo |
+|-------|------|------------|---------|
+| Monto | number | Requerido, mínimo 0.01 | 15000 |
+| Descripción | text | Opcional | "Almuerzo" |
+| Tipo | select | Requerido | "ingreso" o "gasto" |
+| Categoría | select | Requerido | (viene del API) |
+
+**Código clave:**
 ```typescript
-transaccionForm: FormGroup;  // Formulario (heredado de la estructura)
-usuarios: Usuario[] = [];    // Array de usuarios del backend
-```
+// src/app/demo/pages/transaccion/transaccion.component.ts
 
-#### ngOnInit()
-```typescript
-ngOnInit(): void {
-  this.cargarUsuarios();
+// Crear formulario reactivo con validaciones
+transaccionForm = this.fb.group({
+  monto: ['', [Validators.required, Validators.min(0.01)]],
+  descripcion: [''],
+  tipo: ['ingreso', Validators.required],
+  id_categoria: ['', Validators.required]
+});
+
+// Cargar categorías al iniciar
+ngOnInit() {
+  this.transaccionService.getCategorias().subscribe({
+    next: (res) => this.categorias = res.result
+  });
+}
+
+// Cuando usuario envía el formulario
+onSubmit() {
+  if (this.transaccionForm.valid) {
+    this.transaccionService.crearTransaccion(this.transaccionForm.value)
+      .subscribe({
+        next: () => {
+          this.alertService.success('¡Guardado!', 'Movimiento registrado');
+          this.transaccionService.notificarTransaccionGuardada(); // Avisa a SaldoComponent
+          this.transaccionForm.reset({ tipo: 'ingreso' }); // Limpia el form
+        }
+      });
+  }
 }
 ```
 
-#### Método cargarUsuarios()
-```typescript
-cargarUsuarios() {
-  this.usuarioService.getUsuarios().subscribe({
-    next: (res) => {
-      if (res.status === 'success') {
-        this.usuarios = res.result; // Guardar lista
+---
 
-        // Seleccionar primer usuario por defecto
-        if (this.usuarios.length > 0) {
-          this.transaccionForm.patchValue({
-            id_usuario: this.usuarios[0].id_usuario
-          });
-        }
-      }
-    },
-    error: (err) => console.error('Error cargando usuarios', err)
+### 4️⃣ SaldoComponent (`saldo/`)
+
+**¿Qué hace?** Muestra el saldo actual del usuario y se **actualiza automáticamente** cuando se registra una nueva transacción.
+
+**¿Cómo se actualiza solo?**
+
+```typescript
+// src/app/demo/pages/saldo/saldo.component.ts
+
+ngOnInit() {
+  // ESCUCHA cambios en el usuario actual
+  this.usuarioService.usuarioActual$.pipe(takeUntil(this.destroy$))
+    .subscribe(id => {
+      this.obtenerSaldo();
+    });
+
+  // ESCUCHA cuando se guarda una transacción
+  this.transaccionService.transaccionGuardada$.pipe(takeUntil(this.destroy$))
+    .subscribe(() => {
+      this.obtenerSaldo(); // Recarga el saldo
+    });
+}
+
+obtenerSaldo() {
+  this.saldoService.getSaldo(this.usuarioActual).subscribe({
+    next: (res) => {
+      this.saldoActual = res.result.saldo_actual;
+    }
   });
 }
 ```
 
+**¿Por qué funciona?** Porque usa el **patrón Observable**:
+
+1. `TransaccionService` tiene un `Subject` que "dispara" cuando hay nueva transacción
+2. `SaldoComponent` está "suscrito" a ese Subject
+3. Cuando ocurre algo, el Subject notifica a todos los suscriptores
+4. Cada suscriptor reacciona como necesita
+
 ---
 
-## 🔧 Servicios Detallados
+### 5️⃣ HistorialComponent (`historial/`)
 
-### 1️⃣ **SaldoService** (`saldo/service/saldo.service.ts`)
+**¿Qué hace?** Muestra una lista de todas las transacciones y permite **eliminar** registros.
+
+**Funcionalidades:**
+- Lista todas las transacciones del usuario
+- Botón de eliminar con confirmación
+- Muestra tipo (ingreso/gasto) con colores distintos
+
+**Código clave de eliminación:**
+```typescript
+// src/app/demo/pages/historial/historial.component.ts
+
+confirmarEliminar(id: number) {
+  // Mostrar confirmación al usuario
+  if (confirm('¿Estás seguro de eliminar esta transacción?')) {
+    this.transaccionService.eliminarTransaccion(id).subscribe({
+      next: () => {
+        this.alertService.success('Eliminado', 'Transacción borrada');
+        this.cargarHistorial(); // Recargar la lista
+      }
+    });
+  }
+}
+```
+
+---
+
+### 6️⃣ EstadisticasComponent (`estadisticas/`)
+
+**¿Qué hace?** Muestra un **gráfico de pastel** (pie chart) con los gastos por categoría.
+
+**Tecnología:** Chart.js + ng2-charts
+
+```typescript
+// src/app/demo/pages/estadisticas/estadisticas.component.ts
+
+ngOnInit() {
+  this.transaccionService.getEstadisticas().subscribe({
+    next: (res) => {
+      this.actualizarGrafico(res.result);
+    }
+  });
+}
+
+actualizarGrafico(datos: { categoria: string; total: number }[]) {
+  // Configurar datos del gráfico
+  this.graficoData = {
+    labels: datos.map(d => d.categoria),           // ["Comida", "Transporte", ...]
+    datasets: [{
+      data: datos.map(d => d.total),                // [150000, 50000, ...]
+      backgroundColor: ['#ff6384', '#36a2eb', '#ffce56'] // Colores
+    }]
+  };
+}
+```
+
+---
+
+### 7️⃣ AlertComponent y AlertsContainerComponent (`ui-elements/`)
+
+**¿Qué hace?** Sistema de notificaciones/alertas visuales.
+
+**Tipos de alerta:**
+
+| Tipo | Color | Uso |
+|------|-------|-----|
+| success | Verde | Confirmaciones exitosas |
+| danger | Rojo | Errores |
+| warning | Amarillo | Advertencias |
+| info | Azul | Información |
+
+**¿Cómo funciona?**
+
+```
+AuthService / TransaccionService / Cualquier servicio
+        │
+        ▼
+AlertService.addAlert('success', '¡Guardado!')
+        │
+        ▼
+AlertsContainerComponent (que está en NavegacionComponent)
+        │
+        ▼
+Muestra la alerta en pantalla
+        │
+        ▼
+Después de X segundos, desaparece automáticamente
+```
+
+---
+
+## 🔧 Servicios Explicados
+
+> **¿Qué es un servicio?** Es una clase que centraliza la lógica de negocio y la comunicación con el backend. Los servicios son "singletons" (solo existe uno en toda la app).
+
+---
+
+### 1️⃣ AuthService (`auth/service/auth.service.ts`)
+
+**¿Qué hace?** Maneja todo lo relacionado a autenticación (registro, login, logout).
+
+```typescript
+@Injectable({ providedIn: 'root' }) // Angular crea una sola instancia para toda la app
+export class AuthService {
+  private apiUrl = 'http://localhost:5000/api';
+
+  constructor(private http: HttpClient) {}
+
+  // Registrar nuevo usuario
+  registro(datos: { nombre: string; email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/registro`, datos);
+  }
+
+  // Iniciar sesión
+  login(datos: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, datos);
+  }
+
+  // Verificar si está logueado
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('auth_token');
+  }
+
+  // Cerrar sesión
+  logout(): void {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_nombre');
+  }
+}
+```
+
+---
+
+### 2️⃣ TransaccionService (`transaccion/service/transaccion.service.ts`)
+
+**¿Qué hace?** Gestiona todas las operaciones relacionadas a transacciones.
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class TransaccionService {
+  private apiUrl = 'http://localhost:5000/api/transacciones';
+
+  // Subject para notificar eventos a otros componentes
+  private transaccionGuardada = new Subject<void>();
+  public transaccionGuardada$ = this.transaccionGuardada.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  // Obtener todas las transacciones
+  getTransacciones(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
+
+  // Crear nueva transacción
+  crearTransaccion(transaccion: Transaccion): Observable<any> {
+    return this.http.post(this.apiUrl, transaccion);
+  }
+
+  // Eliminar transacción
+  eliminarTransaccion(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  // Obtener categorías para el select
+  getCategorias(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/categorias');
+  }
+
+  // Obtener estadísticas de gastos
+  getEstadisticas(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/estadisticas/gastos');
+  }
+
+  // Notificar a otros componentes que se guardó algo
+  notificarTransaccionGuardada(): void {
+    this.transaccionGuardada.next(); // "Dispara" el evento
+  }
+}
+```
+
+---
+
+### 3️⃣ SaldoService (`saldo/service/saldo.service.ts`)
+
+**¿Qué hace?** Obtiene el saldo del usuario desde el backend.
 
 ```typescript
 @Injectable({ providedIn: 'root' })
@@ -334,21 +641,566 @@ export class SaldoService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtiene el saldo de un usuario específico
   getSaldo(idUsuario: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?id_usuario=${idUsuario}`);
+    return this.http.get(`${this.apiUrl}?id_usuario=${idUsuario}`);
   }
 }
 ```
 
-**Uso:**
+---
+
+### 4️⃣ AlertService (`saldo/service/alert.service.ts`)
+
+**¿Qué hace?** Centraliza la gestión de alertas/notificaciones.
+
 ```typescript
-this.saldoService.getSaldo(2).subscribe(res => {
-  console.log(res.result.saldo_actual); // Acceso al saldo
-});
+@Injectable({ providedIn: 'root' })
+export class AlertService {
+  // BehaviorSubject que mantiene la lista actual de alertas
+  private alertsSubject = new BehaviorSubject<Alert[]>([]);
+  public alerts$ = this.alertsSubject.asObservable();
+
+  // Métodos de conveniencia
+  success(message: string, title?: string, duration = 3000) {
+    this.addAlert('success', message, title, duration);
+  }
+
+  danger(message: string, title?: string, duration = 5000) {
+    this.addAlert('danger', message, title, duration);
+  }
+
+  // Agregar alerta a la lista
+  private addAlert(type: string, message: string, title?: string, duration?: number) {
+    const alert: Alert = {
+      id: Date.now().toString(),
+      type: type as any,
+      message,
+      title,
+      dismissible: true,
+      duration
+    };
+
+    // Agregar a la lista actual
+    const current = this.alertsSubject.value;
+    this.alertsSubject.next([...current, alert]);
+
+    // Auto-eliminar después de duration ms
+    if (duration) {
+      setTimeout(() => this.removeAlert(alert.id), duration);
+    }
+  }
+
+  removeAlert(id: string) {
+    const current = this.alertsSubject.value;
+    this.alertsSubject.next(current.filter(a => a.id !== id));
+  }
+}
 ```
 
-**Respuesta Esperada:**
+---
+
+### 5️⃣ UsuarioService (`usuario/service/usuario.service.component.ts`)
+
+**¿Qué hace?** Gestiona el usuario actualmente seleccionado.
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class UsuarioService {
+  // BehaviorSubject que mantiene el ID del usuario activo
+  private usuarioActualSubject = new BehaviorSubject<number>(2);
+  public usuarioActual$ = this.usuarioActualSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  getUsuarios(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/usuarios');
+  }
+
+  setUsuarioActual(id: number): void {
+    this.usuarioActualSubject.next(id); // Notifica a todos los suscriptores
+  }
+
+  getUsuarioActual(): number {
+    return this.usuarioActualSubject.value; // Obtener valor actual sin suscribirse
+  }
+}
+```
+
+---
+
+## 📦 Modelos de Datos
+
+> **¿Qué es un modelo/interfaz?** Es la "forma" que deben tener los datos. TypeScript las usa para verificar que la información tiene la estructura correcta.
+
+---
+
+### Transaccion (`transaccion/models/transaccion.ts`)
+
+```typescript
+export interface Transaccion {
+  monto: number;           // Ejemplo: 15000
+  descripcion: string;      // Ejemplo: "Almuerzo"
+  tipo: 'ingreso' | 'gasto'; // Solo puede ser una de estas dos opciones
+  id_categoria: number;    // Ejemplo: 3
+}
+```
+
+**Ejemplo de uso:**
+```typescript
+const miTransaccion: Transaccion = {
+  monto: 5000,
+  descripcion: 'Café',
+  tipo: 'gasto',
+  id_categoria: 2
+};
+```
+
+---
+
+### Saldo (`saldo/models/saldo.ts`)
+
+```typescript
+export interface Saldo {
+  total: number; // Ejemplo: 150000
+}
+```
+
+---
+
+### Usuario (`usuario/models/usuario.ts`)
+
+```typescript
+export interface Usuario {
+  id_usuario: number;
+  nombre: string;
+  email: string;
+  creado_en?: string; // El ? significa que es opcional
+}
+```
+
+---
+
+### Categoria (`categorias/models/categorias.ts`)
+
+```typescript
+export interface Categoria {
+  id_categoria: number;
+  nombre: string;      // Ejemplo: "Comida"
+  tipo: string;        // Ejemplo: "gasto"
+}
+```
+
+---
+
+### Alert (`saldo/service/alert.service.ts`)
+
+```typescript
+export interface Alert {
+  id: string;                      // Identificador único
+  type: 'success' | 'danger' | 'warning' | 'info'; // Tipo de alerta
+  title?: string;                 // Título opcional
+  message: string;                 // Mensaje a mostrar
+  dismissible?: boolean;           // Si se puede cerrar manual
+  duration?: number;               // Ms antes de auto-cerrar
+}
+```
+
+---
+
+## 🔄 Flujo de la Aplicación
+
+### Flujo 1: Registro de Usuario
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    REGISTRO DE USUARIO                       │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Usuario abre /registro
+         │
+         ▼
+  2. RegistroComponent muestra formulario
+         │
+         ▼
+  3. Usuario llena: nombre, email, password, confirmar password
+         │
+         ▼
+  4. Usuario hace click en "Registrarse"
+         │
+         ▼
+  5. AuthService.registro() → POST /api/registro
+         │
+         ▼
+  6. Backend crea usuario, responde { status: "success" }
+         │
+         ▼
+  7. Router redirige a /login
+         │
+         ▼
+  8. Usuario ve pantalla de login para iniciar sesión
+```
+
+---
+
+### Flujo 2: Login
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                       INICIO DE SESIÓN                       │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Usuario abre /login
+         │
+         ▼
+  2. LoginComponent muestra formulario
+         │
+         ▼
+  3. Usuario ingresa email + password
+         │
+         ▼
+  4. Usuario click en "Ingresar"
+         │
+         ▼
+  5. AuthService.login() → POST /api/login
+         │
+         ▼
+  6. Backend valida y responde:
+     {
+       "status": "success",
+       "result": {
+         "token": "eyJhbGciOiJIUzI1NiIs...",
+         "nombre": "Juan García"
+       }
+     }
+         │
+         ▼
+  7. Token guardado en localStorage del navegador
+         │
+         ▼
+  8. Router.navigate(['/home'])
+         │
+         ▼
+  9. AuthGuard verifica token (¿existe? ¿válido?)
+         │
+         ▼
+  10. NavegacionComponent se muestra
+```
+
+---
+
+### Flujo 3: Registrar Transacción
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                 REGISTRAR TRANSACCIÓN                       │
+└──────────────────────────────────────────────────────────────┘
+
+  1. NavegacionComponent muestra por defecto sección "movimiento"
+         │
+         ▼
+  2. TransaccionComponent visible
+         │
+         ▼
+  3. ngOnInit() carga categorías desde GET /api/categorias
+         │
+         ▼
+  4. Usuario selecciona:
+     - Monto: 15000
+     - Descripción: "Almuerzo"
+     - Tipo: "gasto"
+     - Categoría: "Comida"
+         │
+         ▼
+  5. Usuario click en "Guardar Movimiento"
+         │
+         ▼
+  6. TransaccionService.crearTransaccion() → POST /api/transacciones
+         │
+         ▼
+  7. Backend guarda, responde { status: "success" }
+         │
+         ▼
+  8. AlertService.success() → muestra alerta verde "¡Guardado!"
+         │
+         ▼
+  9. TransaccionService.notificarTransaccionGuardada()
+     → transaccionGuardada$.next()
+         │
+         ▼
+  10. SaldoComponent (que está escuchando) recibe notificación
+         │
+         ▼
+  11. SaldoComponent llama getSaldo() → GET /api/saldo
+         │
+         ▼
+  12. Saldo actualizado en pantalla
+         │
+         ▼
+  13. Formulario se limpia (reset)
+```
+
+---
+
+### Flujo 4: Ver Historial y Eliminar
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    VER Y ELIMINAR HISTORIAL                  │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Usuario click en "Historial" (navegación inferior)
+         │
+         ▼
+  2. NavegacionComponent.seccionActiva = 'historial'
+         │
+         ▼
+  3. HistorialComponent visible
+         │
+         ▼
+  4. ngOnInit() → TransaccionService.getTransacciones()
+         │
+         ▼
+  5. Backend responde lista de transacciones
+         │
+         ▼
+  6. HistorialComponent muestra la lista
+         │
+         ▼
+  7. Usuario click en botón "Eliminar" de una transacción
+         │
+         ▼
+  8. confirm() pregunta: "¿Estás seguro?"
+         │
+         ▼
+  9. Si usuario confirma → DELETE /api/transacciones/{id}
+         │
+         ▼
+  10. Lista se recarga
+         │
+         ▼
+  11. AlertService.success() → "Eliminado correctamente"
+```
+
+---
+
+## 🛣️ Rutas y Navegación
+
+### Configuración de Rutas (`app.routes.ts`)
+
+```typescript
+export const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirige raíz a login
+
+  // Rutas de autenticación (públicas)
+  {
+    path: 'login',
+    loadComponent: () => import('./demo/pages/auth/login/login.component')
+      .then(m => m.LoginComponent)
+  },
+  {
+    path: 'registro',
+    loadComponent: () => import('./demo/pages/auth/registro/registro.component')
+      .then(m => m.RegistroComponent)
+  },
+
+  // Ruta protegida (solo usuarios logueados)
+  {
+    path: 'home',
+    loadComponent: () => import('./demo/pages/navegacion/navegacion.component')
+      .then(m => m.NavegacionComponent),
+    canActivate: [AuthGuard] // ← Verifica autenticación
+  },
+
+  // Cualquier otra ruta → redirige a login
+  { path: '**', redirectTo: '/login' }
+];
+```
+
+### ¿Qué es el AuthGuard?
+
+Es un "portero" que protege las rutas:
+
+```typescript
+// src/app/auth.guard.ts
+export const AuthGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  // Verificar si existe token en localStorage
+  if (authService.isAuthenticated()) {
+    return true; // Dejar pasar
+  } else {
+    return router.navigate(['/login']); // Redirigir a login
+  }
+};
+```
+
+### Lazy Loading Explicado
+
+**Sin lazy loading:** Todo el código se carga al iniciar → lento
+
+**Con lazy loading:**
+```
+Usuario entra a /login
+        │
+        ↓
+Solo se carga el código de LoginComponent
+        │
+        ↓
+Usuario hace login y va a /home
+        │
+        ↓
+AHORA se carga el código de NavegacionComponent
+        │
+        ↓
+Usuario click en "Estadísticas"
+        │
+        ↓
+Se carga el código de EstadisticasComponent (si no estaba cargado)
+```
+
+**Ventaja:** La app inicia más rápido porque no carga todo de golpe.
+
+---
+
+## 🌐 API del Backend
+
+> **Nota:** Esta aplicación espera que el backend esté corriendo en `http://localhost:5000`. Los siguientes endpoints son los que la aplicación espera.
+
+---
+
+### Autenticación
+
+#### POST /api/registro
+Registrar un nuevo usuario.
+
+```bash
+curl -X POST http://localhost:5000/api/registro \
+  -H "Content-Type: application/json" \
+  -d '{"nombre": "Juan García", "email": "juan@email.com", "password": "123456"}'
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "message": "Usuario registrado correctamente"
+}
+```
+
+---
+
+#### POST /api/login
+Iniciar sesión.
+
+```bash
+curl -X POST http://localhost:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "juan@email.com", "password": "123456"}'
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "result": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "nombre": "Juan García"
+  }
+}
+```
+
+---
+
+### Transacciones
+
+#### GET /api/transacciones
+Obtener todas las transacciones.
+
+**Headers necesarios:**
+```
+Authorization: Bearer {token}
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "result": [
+    {
+      "id": 1,
+      "id_usuario": 1,
+      "monto": 15000,
+      "descripcion": "Almuerzo",
+      "tipo": "gasto",
+      "id_categoria": 3,
+      "fecha": "2026-04-27T12:00:00Z"
+    }
+  ]
+}
+```
+
+---
+
+#### POST /api/transacciones
+Crear una nueva transacción.
+
+```bash
+curl -X POST http://localhost:5000/api/transacciones \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {token}" \
+  -d '{
+    "monto": 15000,
+    "descripcion": "Almuerzo",
+    "tipo": "gasto",
+    "id_categoria": 3
+  }'
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success",
+  "result": {
+    "id": 15,
+    "monto": 15000,
+    "descripcion": "Almuerzo",
+    "tipo": "gasto",
+    "id_categoria": 3
+  }
+}
+```
+
+---
+
+#### DELETE /api/transacciones/{id}
+Eliminar una transacción.
+
+```bash
+curl -X DELETE http://localhost:5000/api/transacciones/15 \
+  -H "Authorization: Bearer {token}"
+```
+
+**Respuesta:**
+```json
+{
+  "status": "success"
+}
+```
+
+---
+
+### Saldo
+
+#### GET /api/saldo?id_usuario={id}
+Obtener el saldo actual de un usuario.
+
+```bash
+curl http://localhost:5000/api/saldo?id_usuario=1 \
+  -H "Authorization: Bearer {token}"
+```
+
+**Respuesta:**
 ```json
 {
   "status": "success",
@@ -360,438 +1212,175 @@ this.saldoService.getSaldo(2).subscribe(res => {
 
 ---
 
-### 2️⃣ **TransaccionService** (`transaccion/service/transaccion.service.ts`)
+### Categorías
 
-```typescript
-@Injectable({ providedIn: 'root' })
-export class TransaccionService {
-  private apiUrl = 'http://localhost:5000/api/transacciones';
-  
-  // Subject para notificar cuando se guarda una transacción
-  private transaccionGuardada = new Subject<void>();
-  public transaccionGuardada$ = this.transaccionGuardada.asObservable();
+#### GET /api/categorias
+Obtener todas las categorías disponibles.
 
-  constructor(private http: HttpClient) {}
-
-  // Crea una nueva transacción en el backend
-  crearTransaccion(transaccion: Transaccion): Observable<any> {
-    return this.http.post(this.apiUrl, transaccion);
-  }
-
-  // Notifica a todos los suscriptores que se guardó una transacción
-  notificarTransaccionGuardada(): void {
-    this.transaccionGuardada.next();
-  }
-}
+```bash
+curl http://localhost:5000/api/categorias \
+  -H "Authorization: Bearer {token}"
 ```
 
-**Uso:**
-```typescript
-// Crear y guardar transacción
-this.transaccionService.crearTransaccion({
-  id_usuario: 1,
-  monto: 5000,
-  descripcion: 'Café',
-  tipo: 'gasto',
-  id_categoria: 3
-}).subscribe(res => {
-  console.log('Guardado:', res);
-});
-
-// Escuchar cuando se guarda una transacción
-this.transaccionService.transaccionGuardada$.subscribe(() => {
-  console.log('¡Se guardó una transacción!');
-});
-```
-
----
-
-### 3️⃣ **UsuarioService** (`usuario/service/usuario.service.component.ts`)
-
-```typescript
-@Injectable({ providedIn: 'root' })
-export class UsuarioService {
-  private apiUrl = 'http://localhost:5000/api/usuarios';
-
-  // BehaviorSubject mantiene el estado del usuario activo
-  private usuarioActualSubject = new BehaviorSubject<number>(2);
-  public usuarioActual$ = this.usuarioActualSubject.asObservable();
-
-  constructor(private http: HttpClient) {}
-
-  // Obtiene lista completa de usuarios
-  getUsuarios(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
-  }
-
-  // Cambia el usuario activo (notifica a todos los suscriptores)
-  setUsuarioActual(usuarioId: number): void {
-    this.usuarioActualSubject.next(usuarioId);
-  }
-
-  // Obtiene el valor actual sin necesidad de observable
-  getUsuarioActual(): number {
-    return this.usuarioActualSubject.value;
-  }
-}
-```
-
-**Uso:**
-```typescript
-// Obtener lista de usuarios
-this.usuarioService.getUsuarios().subscribe(res => {
-  console.log(res.result); // Array de usuarios
-});
-
-// Cambiar usuario activo
-this.usuarioService.setUsuarioActual(5);
-
-// Escuchar cambios del usuario activo
-this.usuarioService.usuarioActual$.subscribe(usuarioId => {
-  console.log('Usuario activo:', usuarioId);
-});
-
-// Obtener valor actual
-const actual = this.usuarioService.getUsuarioActual();
-```
-
----
-
-### 4️⃣ **AlertService** (`saldo/service/alert.service.ts`)
-
-```typescript
-export interface Alert {
-  id: string;
-  type: 'success' | 'danger' | 'warning' | 'info';
-  title?: string;
-  message: string;
-  dismissible?: boolean;
-  duration?: number;
-}
-
-@Injectable({ providedIn: 'root' })
-export class AlertService {
-  private alertsSubject = new BehaviorSubject<Alert[]>([]);
-  public alerts$ = this.alertsSubject.asObservable();
-
-  constructor(private ngZone: NgZone) {}
-
-  // Métodos de conveniencia
-  success(message: string, title?: string, duration?: number) {
-    this.addAlert('success', message, title, duration);
-  }
-
-  danger(message: string, title?: string, duration?: number) {
-    this.addAlert('danger', message, title, duration);
-  }
-
-  warning(message: string, title?: string, duration?: number) {
-    this.addAlert('warning', message, title, duration);
-  }
-
-  info(message: string, title?: string, duration?: number) {
-    this.addAlert('info', message, title, duration);
-  }
-
-  // Método principal que añade alertas
-  addAlert(type: string, message: string, title?: string, duration?: number) {
-    const alert: Alert = {
-      id: Date.now().toString() + Math.random(),
-      type: type as any,
-      title,
-      message,
-      dismissible: true,
-      duration: duration || 5000
-    };
-
-    const currentAlerts = this.alertsSubject.value;
-    this.alertsSubject.next([...currentAlerts, alert]);
-  }
-}
-```
-
-**Uso:**
-```typescript
-// Mostrar alerta de éxito
-this.alertService.success('¡Guardado!', 'Operación exitosa', 3000);
-
-// Mostrar alerta de error
-this.alertService.danger('Error de conexión', 'Error', 5000);
-
-// Mostrar alerta de advertencia
-this.alertService.warning('Confirma tu acción', 'Advertencia');
-
-// Escuchar todas las alertas
-this.alertService.alerts$.subscribe(alerts => {
-  console.log('Alertas:', alerts);
-});
-```
-
----
-
-## 📦 Modelos de Datos
-
-### Saldo (`saldo/models/saldo.ts`)
-```typescript
-export interface Saldo {
-  total: number;
-}
-```
-
-### Transacción (`transaccion/models/transaccion.ts`)
-```typescript
-export interface Transaccion {
-  id_usuario: number;
-  monto: number;
-  descripcion: string;
-  tipo: string;           // 'ingreso' o 'gasto'
-  id_categoria: number;
-}
-```
-
-### Usuario (`usuario/models/usuario.ts`)
-```typescript
-export interface Usuario {
-  id_usuario: number;
-  nombre: string;
-  email: string;
-  // ... más campos según tu backend
-}
-```
-
----
-
-## 🌐 Endpoints API Esperados
-
-La aplicación espera estos endpoints en `http://localhost:5000`:
-
-### 1. Obtener Usuarios
-```
-GET /api/usuarios
-
-Respuesta:
+**Respuesta:**
+```json
 {
   "status": "success",
   "result": [
-    {
-      "id_usuario": 1,
-      "nombre": "Juan García",
-      "email": "juan@example.com"
-    },
-    {
-      "id_usuario": 2,
-      "nombre": "María López",
-      "email": "maria@example.com"
-    }
+    { "id_categoria": 1, "nombre": "Salario", "tipo": "ingreso" },
+    { "id_categoria": 2, "nombre": "Comida", "tipo": "gasto" },
+    { "id_categoria": 3, "nombre": "Transporte", "tipo": "gasto" },
+    { "id_categoria": 4, "nombre": "Entretenimiento", "tipo": "gasto" }
   ]
 }
 ```
 
-### 2. Obtener Saldo
-```
-GET /api/saldo?id_usuario=1
+---
 
-Respuesta:
+### Estadísticas
+
+#### GET /api/estadisticas/gastos
+Obtener resumen de gastos por categoría.
+
+```bash
+curl http://localhost:5000/api/estadisticas/gastos \
+  -H "Authorization: Bearer {token}"
+```
+
+**Respuesta:**
+```json
 {
   "status": "success",
-  "result": {
-    "saldo_actual": 150000,
-    "id_usuario": 1
-  }
+  "result": [
+    { "categoria": "Comida", "total": 150000 },
+    { "categoria": "Transporte", "total": 50000 },
+    { "categoria": "Entretenimiento", "total": 30000 }
+  ]
 }
 ```
 
-### 3. Crear Transacción
+---
+
+### Usuarios
+
+#### GET /api/usuarios
+Obtener lista de usuarios.
+
+```bash
+curl http://localhost:5000/api/usuarios \
+  -H "Authorization: Bearer {token}"
 ```
-POST /api/transacciones
 
-Body:
-{
-  "id_usuario": 1,
-  "monto": 5000,
-  "descripcion": "Café",
-  "tipo": "gasto",
-  "id_categoria": 3
-}
-
-Respuesta:
+**Respuesta:**
+```json
 {
   "status": "success",
-  "message": "Transacción creada",
-  "result": {
-    "id": 100,
-    "id_usuario": 1,
-    "monto": 5000,
-    "fecha": "2024-03-15"
-  }
+  "result": [
+    { "id_usuario": 1, "nombre": "Juan García", "email": "juan@email.com" },
+    { "id_usuario": 2, "nombre": "María López", "email": "maria@email.com" }
+  ]
 }
 ```
 
 ---
 
-## 🔄 Flujo de Datos Detallado
+## 💻 Instalación y Ejecución
 
-### Flujo: Cambiar Usuario
-```
-1. Usuario selecciona otro en TransaccionComponent
-   ↓
-2. transaccionForm.get('id_usuario').valueChanges dispara evento
-   ↓
-3. usuarioService.setUsuarioActual(nuevoId)
-   ↓
-4. BehaviorSubject notifica a todos los suscriptores
-   ↓
-5. SaldoComponent recibe nueva ID
-   ↓
-6. SaldoComponent llama getSaldo(nuevoId)
-   ↓
-7. Backend retorna saldo nuevo
-   ↓
-8. Pantalla actualiza e muestra nuevo saldo
-```
+### Requisitos Previos
 
-### Flujo: Guardar Transacción
-```
-1. Usuario llena formulario y presiona "Guardar Movimiento"
-   ↓
-2. transaccionComponent.onSubmit() valida el form
-   ↓
-3. transaccionService.crearTransaccion(datos) envía POST
-   ↓
-4. Backend guarda la transacción
-   ↓
-5. transaccionService.notificarTransaccionGuardada() dispara Subject
-   ↓
-6. SaldoComponent escucha la notificación
-   ↓
-7. SaldoComponent llama getSaldo() para refrescar
-   ↓
-8. Saldo en pantalla se actualiza
-   ↓
-9. AlertService.success() muestra confirmación
+- **Node.js** versión 18 o superior
+- **npm** (viene con Node.js)
+- **Backend Flask** corriendo en `http://localhost:5000`
+
+### Pasos de Instalación
+
+```bash
+# 1. Abrir terminal en la carpeta del proyecto
+
+# 2. Instalar todas las dependencias
+npm install
+
+# 3. (Opcional) Verificar que todo está bien
+npm version
 ```
 
----
+### Ejecutar en Desarrollo
 
-## 📊 Patrones Reactivos Usados
+```bash
+# Iniciar el servidor de desarrollo
+npm start
 
-### 1. BehaviorSubject (UsuarioService)
-```typescript
-private usuarioActualSubject = new BehaviorSubject<number>(2);
-public usuarioActual$ = this.usuarioActualSubject.asObservable();
-
-// Inicializa con valor 2
-// Emite último valor a nuevos suscriptores
-// Permite lectura del valor: getUsuarioActual()
+# La aplicación estará disponible en:
+# http://localhost:4200
 ```
 
-### 2. Subject (TransaccionService)
-```typescript
-private transaccionGuardada = new Subject<void>();
-public transaccionGuardada$ = this.transaccionGuardada.asObservable();
+### Scripts Disponibles
 
-// Sin valor inicial
-// Solo notifica nuevos suscriptores
-// Usado para eventos únicos
-```
+| Comando | Descripción |
+|---------|-------------|
+| `npm start` | Inicia servidor de desarrollo en puerto 4200 |
+| `npm test` | Ejecuta los tests (Jasmine/Karma) |
+| `npm run build` | Genera build de producción en `/dist` |
+| `npm run watch` | Build en modo watch (recompila al cambiar archivos) |
 
-### 3. takeUntil (Limpieza automática)
-```typescript
-private destroy$ = new Subject<void>();
+### Build de Producción
 
-this.usuarioService.usuarioActual$
-  .pipe(takeUntil(this.destroy$))
-  .subscribe(...);
+```bash
+# Genera archivos optimizados en dist/desollo-plat-front/
+npm run build
 
-ngOnDestroy(): void {
-  this.destroy$.next();    // Completa el observable
-  this.destroy$.complete();
-}
-// Previene memory leaks automáticamente
+# Los archivos resultantes se pueden desplegar en cualquier servidor web estático
 ```
 
 ---
 
-## 🎯 Casos de Uso Principales
+## 📖 Glosario de Términos
 
-### Caso 1: Ver mi saldo
-1. Página carga → `SaldoComponent` inicia
-2. Llama `obtenerSaldo()` con usuario por defecto (2)
-3. Muestra saldo formateado en moneda COP
-
-### Caso 2: Cambiar de usuario
-1. Selecciono usuario diferente en el dropdown
-2. `transaccionForm` dispara `valueChanges`
-3. `setUsuarioActual()` actualiza el estado
-4. `SaldoComponent` detecta el cambio en `usuarioActual$`
-5. Carga nuevo saldo automáticamente
-
-### Caso 3: Registrar gasto
-1. Selecciono usuario, monto, descripción
-2. Presiono "Guardar Movimiento"
-3. HTTP POST a `/api/transacciones`
-4. Si es exitoso:
-   - Alerta verde de éxito
-   - `notificarTransaccionGuardada()` se dispara
-   - Saldo se recarga automáticamente
-   - Formulario se limpia
-
----
-
-## 🧪 Ejemplo de Test
-
-```typescript
-describe('SaldoComponent', () => {
-  let component: SaldoComponent;
-  let fixture: ComponentFixture<SaldoComponent>;
-  let saldoService: SaldoService;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SaldoComponent]
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(SaldoComponent);
-    component = fixture.componentInstance;
-    saldoService = TestBed.inject(SaldoService);
-  });
-
-  it('debe mostrar el saldo del usuario actual', () => {
-    spyOn(saldoService, 'getSaldo').and.returnValue(
-      of({ status: 'success', result: { saldo_actual: 50000 } })
-    );
-
-    fixture.detectChanges();
-    expect(component.saldoActual).toBe(50000);
-  });
-});
-```
+| Término | Definición |
+|---------|------------|
+| **Angular** | Framework de JavaScript para construir aplicaciones web |
+| **BehaviorSubject** | Un tipo de observable que siempre tiene un valor actual |
+| **CanActivate** | Función que decide si una ruta puede ser accedida |
+| **Component** | Clase que controla una parte de la interfaz de usuario |
+| **Decorator** | Función que modifica el comportamiento de una clase (@Injectable, @Component) |
+| **Dependency Injection** | Patrón donde Angular "inyecta" las dependencias automáticamente |
+| **FormGroup** | Objeto que agrupa y valida campos de un formulario |
+| **HttpClient** | Servicio de Angular para hacer peticiones HTTP |
+| **Interceptor** | Función que procesa todas las peticiones HTTP salientes |
+| **Lazy Loading** | Técnica de cargar código solo cuando se necesita |
+| **Observable** | Objeto que emite valores con el tiempo |
+| **Reactive Forms** | Formularios basados en observables y validación programática |
+| **RxJS** | Librería para manejar datos asíncronos (observables) |
+| **Service** | Clase que centraliza lógica de negocio |
+| **Standalone** | Componentes que no requieren NgModule |
+| **Subject** | Tipo de observable que permite emitir valores manualmente |
+| **Subscription** | Conexión entre un observable y un suscriptor |
+| **takeUntil** | Operador RxJS que completa un observable cuando otro emite |
+| **TypeScript** | Superset de JavaScript con tipos estáticos |
+| **Zone.js** | Librería que detecta cambios asíncronos en Angular |
 
 ---
 
-## 🚨 Notas Importantes
+## 🔮 Mejoras Futuras Posibles
 
-⚠️ **Backend requerido**: La app espera un API en `localhost:5000`  
-⚠️ **CORS**: Se debe habilitar CORS en el backend  
-⚠️ **Estructura API**: Los endpoints deben retornar `{ status, result }`  
-⚠️ **HttpClient providedIn**: Incluye HttpClient en `app.config.ts`  
-⚠️ **Memoria**: Se limpian suscripciones con `takeUntil` en `ngOnDestroy`
+Si quisieras mejorar esta aplicación, aquí hay algunas ideas:
 
----
-
-## 🔗 Referencias Rápidas
-
-- **Componentes**: `src/app/demo/pages/`
-- **Servicios**: `src/app/demo/pages/*/service/`
-- **Modelos**: `src/app/demo/pages/*/models/`
-- **Backend URL**: `http://localhost:5000`
+1. **Tests E2E** - Usar Cypress o Playwright para probar flujos completos
+2. **Variables de Entorno** - Mover URLs hardcodeadas a archivos `.env`
+3. **Gestión de Estado Global** - Implementar NgRx para estado más complejo
+4. **Dark Mode** - Agregar tema oscuro
+5. **PWA** - Hacer la app instalable en celulares
+6. **Gráficos Avanzados** - Más tipos de gráficos (líneas, barras)
+7. **Exportar Datos** - Exportar historial a Excel/PDF
+8. **Filtros en Historial** - Filtrar por fecha, tipo, categoría
 
 ---
 
 <div align="center">
 
-**Documentación Técnica Completa del Código**
+**Documentación generada para FinanzasApp**
+Angular 19 + TypeScript + RxJS
 
-Generada: 2026 | Angular 19 + TypeScript + RxJS
+¿Dudas? Revisa el código fuente en `src/app/`
 
 </div>
