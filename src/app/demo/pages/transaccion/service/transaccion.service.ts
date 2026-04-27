@@ -7,10 +7,9 @@ import { Transaccion } from '../models/transaccion';
   providedIn: 'root'
 })
 export class TransaccionService {
-  // Ajusta esta URL según el puerto de tu backend en Python
   private apiUrl = 'http://localhost:5000/api/transacciones';
+  private estadisticasUrl = 'http://localhost:5000/api/estadisticas/gastos';
 
-  // Subject para notificar cuando se guarda una transacción
   private transaccionGuardada = new Subject<void>();
   public transaccionGuardada$ = this.transaccionGuardada.asObservable();
 
@@ -18,6 +17,19 @@ export class TransaccionService {
 
   crearTransaccion(transaccion: Transaccion): Observable<any> {
     return this.http.post(this.apiUrl, transaccion);
+  }
+
+  getTransacciones(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
+
+  getEstadisticasGastos(): Observable<any> {
+    return this.http.get(this.estadisticasUrl);
+  }
+
+  getCategorias(tipo?: string): Observable<any> {
+    const url = tipo ? `${this.apiUrl.replace('transacciones', 'categorias')}?tipo=${tipo}` : `${this.apiUrl.replace('transacciones', 'categorias')}`;
+    return this.http.get(url);
   }
 
   notificarTransaccionGuardada(): void {
