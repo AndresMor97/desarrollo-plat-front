@@ -13,21 +13,12 @@
       <strong>{{ getTotal() | currency:'COP':'symbol':'1.0-0' }}</strong>
     </div>
 
-    <div class="barras">
-      <div *ngFor="let item of estadisticas; let i = index" class="barra-item">
-        <div class="barra-info">
-          <span class="categoria">{{ item.categoria }}</span>
-          <span class="monto">{{ item.total | currency:'COP':'symbol':'1.0-0' }}</span>
-        </div>
-        <div class="barra-fondo">
-          <div
-            class="barra-relleno"
-            [style.width.%]="getPorcentaje(item.total)"
-            [style.background-color]="getColores()[i % getColores().length]">
-          </div>
-        </div>
-        <span class="porcentaje">{{ getPorcentaje(item.total) | number:'1.0-0' }}%</span>
-      </div>
+    <div class="grafico-container">
+      <canvas baseChart
+              [data]="pieChartData"
+              [options]="pieChartOptions"
+              type="pie">
+      </canvas>
     </div>
   </div>
 </div>

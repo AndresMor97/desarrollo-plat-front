@@ -21,6 +21,8 @@ interface Transaccion {
 export class HistorialComponent implements OnInit {
   transacciones: Transaccion[] = [];
   cargando = true;
+  transaccionAEliminar: Transaccion | null = null;
+  showConfirmDialog = false;
 
   constructor(private transaccionService: TransaccionService) {}
 
@@ -47,6 +49,33 @@ export class HistorialComponent implements OnInit {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
+    });
+  }
+
+  confirmarEliminacion(transaccion: Transaccion) {
+    this.transaccionAEliminar = transaccion;
+    this.showConfirmDialog = true;
+  }
+
+  cancelarEliminacion() {
+    this.transaccionAEliminar = null;
+    this.showConfirmDialog = false;
+  }
+
+  eliminarTransaccion() {
+    if (!this.transaccionAEliminar) return;
+
+    this.transaccionService.eliminarTransaccion(this.transaccionAEliminar.id).subscribe({
+      next: () => {
+        this.transaccionAEliminar = null;
+        this.showConfirmDialog = false;
+        this.cargarTransacciones();
+        this.transaccionService.notificarTransaccionGuardada();
+      },
+      error: () => {
+        this.transaccionAEliminar = null;
+        this.showConfirmDialog = false;
+      }
     });
   }
 }

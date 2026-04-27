@@ -35,4 +35,8 @@ export class TransaccionService {
   notificarTransaccionGuardada(): void {
     this.transaccionGuardada.next();
   }
+
+  eliminarTransaccion(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

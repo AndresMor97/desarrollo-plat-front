@@ -28,6 +28,28 @@
       <div class="movimiento-monto" [ngClass]="t.tipo === 'gasto' ? 'monto-gasto' : 'monto-ingreso'">
         {{ t.tipo === 'gasto' ? '-' : '+' }}{{ t.monto | currency:'COP':'symbol':'1.0-0' }}
       </div>
+
+      <button class="btn-eliminar" (click)="confirmarEliminacion(t)" title="Eliminar">
+        <span class="material-symbols-outlined">delete</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal-overlay" *ngIf="showConfirmDialog" (click)="cancelarEliminacion()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>¿Eliminar registro?</h3>
+    <p>¿Estás seguro de que deseas eliminar este movimiento?</p>
+    <p class="detalle">
+      <strong>{{ transaccionAEliminar?.descripcion }}</strong><br>
+      <span [ngClass]="transaccionAEliminar?.tipo === 'gasto' ? 'monto-gasto' : 'monto-ingreso'">
+        {{ transaccionAEliminar?.tipo === 'gasto' ? '-' : '+' }}{{ transaccionAEliminar?.monto | currency:'COP':'symbol':'1.0-0' }}
+      </span>
+    </p>
+    <div class="modal-botones">
+      <button class="btn-cancelar" (click)="cancelarEliminacion()">Cancelar</button>
+      <button class="btn-confirmar" (click)="eliminarTransaccion()">Eliminar</button>
     </div>
   </div>
 </div>
