@@ -1,42 +1,133 @@
 .tarjeta-saldo {
-  /* Forzamos tu tipografía favorita */
-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #ffffff;
+  border-radius: 20px;
+  margin: 16px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06);
 
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-text-align: center;
-padding: 2rem 1rem;
-
-/* Un fondo sutilmente diferente al blanco puro si lo deseas, 
-     o lo dejamos transparente para que herede el panel principal */
-background: transparent;
-
-h3 {
-    color: #718096; /* Un gris elegante y no tan agresivo como el negro */
-    font-size: 1.1rem;
-    text-transform: uppercase; /* Letras en mayúscula para darle formalidad */
-    letter-spacing: 1.5px; /* Separamos un poco las letras */
-    margin-bottom: 0.5rem;
-    margin-top: 0;
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #86868b;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 0.5rem 0;
     font-weight: 500;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+    }
+  }
 }
 
 .saldo-destacado {
-    font-size: 3.5rem; /* Un número bien grande para que sea lo primero que veas */
-    font-weight: 700;
-    margin: 0;
-    text-shadow: 1px 2px 4px rgba(0,0,0,0.05); /* Sombra muy suave para darle profundidad */
-    transition: color 0.3s ease; /* Transición suave si el saldo cambia */
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 1px 2px 4px rgba(0,0,0,0.05);
+  transition: color 0.3s ease;
 }
 
-  /* Clases dinámicas que inyectamos desde el HTML */
 .positivo {
-    color: #38a169; /* Verde finanzas */
+  color: #27ae60;
 }
 
 .negativo {
-    color: #e53e3e; /* Rojo alerta */
+  color: #ff3b30;
 }
+
+.saldos-categoria {
+  width: 100%;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.saldos-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
+
+.saldos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.saldo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  background: #f5f5f7;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #eaeaec;
+    transform: translateY(-2px);
+  }
+}
+
+.saldo-card-nombre {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1d1d1f;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.saldo-card-monto {
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  &.positivo {
+    color: #27ae60;
+  }
+
+  &.negativo {
+    color: #ff3b30;
+  }
+}
+
+.saldo-card-tipo {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+
+  &.gasto {
+    background: #ffe5e5;
+    color: #ff3b30;
+  }
+
+  &.ingreso {
+    background: #e5f5e5;
+    color: #27ae60;
+  }
+}
+
+.empty-saldos {
+  text-align: center;
+  color: #86868b;
+  font-size: 0.9rem;
+  font-style: italic;
+  padding: 1rem;
+  margin: 0;
 }

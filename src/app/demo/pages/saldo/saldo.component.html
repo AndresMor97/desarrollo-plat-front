@@ -1,9 +1,26 @@
 <div class="tarjeta-saldo">
-<h3 style="display: flex; align-items: center; gap: 10px;">
-    <span class="material-symbols-outlined">account_balance_wallet</span>
-    Mi Saldo Disponible
-</h3>
-<h1 class="saldo-destacado" [ngClass]="{'positivo': saldoActual >= 0, 'negativo': saldoActual < 0}">
-    {{ saldoActual | currency:'COP':'symbol':'1.0-0' }}
-</h1>
+    <h3 style="display: flex; align-items: center; gap: 10px;">
+        <span class="material-symbols-outlined">account_balance_wallet</span>
+        Mi Saldo Disponible
+    </h3>
+    <h1 class="saldo-destacado" [ngClass]="{'positivo': saldoActual >= 0, 'negativo': saldoActual < 0}">
+        {{ saldoActual | currency:'COP':'symbol':'1.0-0' }}
+    </h1>
+
+    <div class="saldos-categoria">
+        <h4 class="saldos-title">Saldos por Categoría</h4>
+        <div class="saldos-grid">
+            @for (item of saldosPorCategoria; track item.id_categoria) {
+                <div class="saldo-card">
+                    <span class="saldo-card-nombre">{{ item.nombre }}</span>
+                    <span class="saldo-card-monto" [ngClass]="item.tipo === 'ingreso' ? 'positivo' : 'negativo'">
+                        {{ item.total_acumulado | currency:'COP':'symbol':'1.0-0' }}
+                    </span>
+                    <span class="saldo-card-tipo" [class]="item.tipo">{{ item.tipo }}</span>
+                </div>
+            } @empty {
+                <p class="empty-saldos">No hay movimientos registrados</p>
+            }
+        </div>
+    </div>
 </div>

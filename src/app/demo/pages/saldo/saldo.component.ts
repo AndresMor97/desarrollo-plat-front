@@ -1,10 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SaldoService } from './service/saldo.service';
+import { CategoriaService } from '../categorias/service/categoria.service';
 import { UsuarioService } from '../usuario/service/usuario.service.component';
 import { TransaccionService } from '../transaccion/service/transaccion.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+interface SaldoCategoria {
+  id_categoria: number;
+  nombre: string;
+  tipo: string;
+  total_acumulado: number;
+}
 
 @Component({
     selector: 'app-saldo',
@@ -16,44 +24,55 @@ import { takeUntil } from 'rxjs/operators';
 export class SaldoComponent implements OnInit, OnDestroy {
     saldoActual: number = 0;
     usuarioActual: number = 2;
+    saldosPorCategoria: SaldoCategoria[] = [];
     private destroy$ = new Subject<void>();
 
     constructor(
         private saldoService: SaldoService,
+        private categoriaService: CategoriaService,
         private usuarioService: UsuarioService,
         private transaccionService: TransaccionService
     ) {}
 
     ngOnInit(): void {
-        // Suscribirse a cambios del usuario activo
         this.usuarioService.usuarioActual$
             .pipe(takeUntil(this.destroy$))
             .subscribe(usuarioId => {
                 this.usuarioActual = usuarioId;
                 this.obtenerSaldo();
+                this.obtenerSaldosPorCategoria();
             });
 
-        // Suscribirse a notificaciones de transacciones guardadas
         this.transaccionService.transaccionGuardada$
             .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
                 this.obtenerSaldo();
+                this.obtenerSaldosPorCategoria();
             });
 
-        // Obtener saldo inicial
         this.obtenerSaldo();
+        this.obtenerSaldosPorCategoria();
     }
 
     obtenerSaldo() {
-        // Le pasamos el usuario actual a la función del servicio
         this.saldoService.getSaldo(this.usuarioActual).subscribe({
             next: (res) => {
-                // Recuerda que según tu Postman, el saldo viene dentro de res.result.saldo_actual
                 if (res.status === 'success') {
                     this.saldoActual = res.result.saldo_actual;
                 }
             },
             error: (err) => console.error('Error al obtener el saldo', err)
+        });
+    }
+
+    obtenerSaldosPorCategoria() {
+        this.categoriaService.getSaldosPorCategoria().subscribe({
+            next: (res) => {
+                if (res.status === 'success') {
+                    this.saldosPorCategoria = res.result || [];
+                }
+            },
+            error: (err) => console.error('Error al obtener saldos por categoría', err)
         });
     }
 
