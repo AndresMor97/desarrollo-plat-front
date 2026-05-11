@@ -28,6 +28,10 @@
   <section *ngIf="seccionActiva === 'estadisticas'" class="seccion">
     <app-estadisticas></app-estadisticas>
   </section>
+
+  <section *ngIf="seccionActiva === 'categorias'" class="seccion">
+    <app-categoria></app-categoria>
+  </section>
 </main>
 
 <nav class="navegacion">
@@ -61,5 +65,13 @@
     (click)="cambiarSeccion('estadisticas')">
     <span class="material-symbols-outlined">pie_chart</span>
     <span>Estadísticas</span>
+  </button>
+
+  <button
+    class="nav-btn"
+    [class.active]="seccionActiva === 'categorias'"
+    (click)="cambiarSeccion('categorias')">
+    <span class="material-symbols-outlined">category</span>
+    <span>Categorías</span>
   </button>
 </nav>

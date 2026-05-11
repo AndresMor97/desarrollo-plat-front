@@ -5,15 +5,16 @@ import { TransaccionComponent } from '../transaccion/transaccion.component';
 import { SaldoComponent } from '../saldo/saldo.component';
 import { HistorialComponent } from '../historial/historial.component';
 import { EstadisticasComponent } from '../estadisticas/estadisticas.component';
+import { CategoriaComponent } from '../categorias/categoria.component';
 import { AlertsContainerComponent } from '../ui-elements/alerts-container.component';
 import { AuthService } from '../auth/service/auth.service';
 
-export type SeccionActiva = 'movimiento' | 'saldo' | 'historial' | 'estadisticas';
+export type SeccionActiva = 'movimiento' | 'saldo' | 'historial' | 'estadisticas' | 'categorias';
 
 @Component({
   selector: 'app-navegacion',
   standalone: true,
-  imports: [CommonModule, TransaccionComponent, SaldoComponent, HistorialComponent, EstadisticasComponent, AlertsContainerComponent],
+  imports: [CommonModule, TransaccionComponent, SaldoComponent, HistorialComponent, EstadisticasComponent, CategoriaComponent, AlertsContainerComponent],
   templateUrl: './navegacion.component.html',
   styleUrls: ['./navegacion.component.css']
 })
