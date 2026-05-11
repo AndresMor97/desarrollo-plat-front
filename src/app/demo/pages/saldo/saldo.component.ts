@@ -10,8 +10,9 @@ import { takeUntil } from 'rxjs/operators';
 interface SaldoCategoria {
   id_categoria: number;
   nombre: string;
-  tipo: string;
-  total_acumulado: number;
+  total_ingresos: number;
+  total_gastos: number;
+  saldo_total: number;
 }
 
 @Component({

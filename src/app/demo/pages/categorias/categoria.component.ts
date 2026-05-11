@@ -24,8 +24,7 @@ export class CategoriaComponent implements OnInit {
     private alertService: AlertService
   ) {
     this.categoriaForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-      tipo: ['gasto', Validators.required]
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]]
     });
   }
 
@@ -51,7 +50,7 @@ export class CategoriaComponent implements OnInit {
       this.categoriaService.crearCategoria(categoria).subscribe({
         next: () => {
           this.alertService.success('Categoría creada con éxito', '¡Éxito!', 3000);
-          this.categoriaForm.reset({ tipo: 'gasto' });
+          this.categoriaForm.reset();
           this.cargarCategorias();
         },
         error: (err) => {

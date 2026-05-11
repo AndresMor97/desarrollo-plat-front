@@ -15,14 +15,6 @@
         maxlength="50">
     </div>
 
-    <div class="campo">
-      <label for="tipo">Tipo</label>
-      <select id="tipo" formControlName="tipo">
-        <option value="gasto">Gasto</option>
-        <option value="ingreso">Ingreso</option>
-      </select>
-    </div>
-
     <button type="submit" class="btn-crear" [disabled]="categoriaForm.invalid">
       Crear Categoría
     </button>
@@ -30,13 +22,10 @@
 
   <div class="list-section">
     <h3>Mis Categorías</h3>
-    <div class="categorias-list">
+    <div class="categorias-grid">
       @for (categoria of categorias; track categoria.id_categoria) {
-        <div class="categoria-item">
-          <div class="categoria-info">
-            <span class="categoria-nombre">{{ categoria.nombre }}</span>
-            <span class="categoria-tipo" [class]="categoria.tipo">{{ categoria.tipo }}</span>
-          </div>
+        <div class="categoria-card">
+          <span class="categoria-nombre">{{ categoria.nombre }}</span>
           <button
             class="btn-eliminar"
             (click)="eliminarCategoria(categoria)"

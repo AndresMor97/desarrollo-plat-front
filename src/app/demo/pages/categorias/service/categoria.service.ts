@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 export interface Categoria {
   id_categoria?: number;
   nombre: string;
-  tipo: 'ingreso' | 'gasto';
   id_usuario?: number;
 }
 

@@ -7,7 +7,6 @@ import { AlertService } from '../saldo/service/alert.service';
 interface Categoria {
   id_categoria: number;
   nombre: string;
-  tipo: string;
 }
 
 @Component({
@@ -20,7 +19,6 @@ interface Categoria {
 export class TransaccionComponent implements OnInit {
     transaccionForm: FormGroup;
     categorias: Categoria[] = [];
-    categoriaPorTipo: { [key: string]: number } = {};
 
     constructor(
         private fb: FormBuilder,
@@ -33,13 +31,6 @@ export class TransaccionComponent implements OnInit {
             tipo: ['ingreso', Validators.required],
             id_categoria: ['', Validators.required]
         });
-
-        this.transaccionForm.get('tipo')?.valueChanges.subscribe(tipo => {
-            const id = this.categoriaPorTipo[tipo];
-            if (id) {
-                this.transaccionForm.get('id_categoria')?.setValue(id);
-            }
-        });
     }
 
     ngOnInit() {
@@ -50,14 +41,6 @@ export class TransaccionComponent implements OnInit {
         this.transaccionService.getCategorias().subscribe({
             next: (res: any) => {
                 this.categorias = res.result || [];
-                this.categorias.forEach(cat => {
-                    this.categoriaPorTipo[cat.tipo] = cat.id_categoria;
-                });
-                const tipoActual = this.transaccionForm.get('tipo')?.value;
-                const idDefault = this.categoriaPorTipo[tipoActual];
-                if (idDefault) {
-                    this.transaccionForm.get('id_categoria')?.setValue(idDefault);
-                }
             },
             error: () => {
                 this.alertService.danger('Error al cargar categorías', 'Error', 4000);
@@ -79,12 +62,7 @@ export class TransaccionComponent implements OnInit {
                 next: () => {
                     this.alertService.success('Movimiento guardado con éxito', '¡Éxito!', 3000);
                     this.transaccionService.notificarTransaccionGuardada();
-                    const tipoActual = this.transaccionForm.get('tipo')?.value;
-                    const idDefault = this.categoriaPorTipo[tipoActual];
-                    this.transaccionForm.reset({
-                        tipo: tipoActual,
-                        id_categoria: idDefault || ''
-                    });
+                    this.transaccionForm.reset({ tipo: 'ingreso' });
                 },
                 error: () => {
                     this.alertService.danger('Error al guardar el movimiento', 'Error', 4000);
