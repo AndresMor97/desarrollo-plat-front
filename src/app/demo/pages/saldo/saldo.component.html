@@ -16,19 +16,19 @@
                         <span class="saldo-card-nombre">{{ item.nombre }}</span>
                     </div>
                     <div class="saldo-card-body">
-                        <div class="saldo-row">
+                        <div class="saldo-item">
                             <span class="saldo-label">Ingresos</span>
-                            <span class="saldo-value ingresos">{{ item.total_ingresos | currency:'COP':'symbol':'1.0-0' }}</span>
+                            <span class="saldo-value COP">COP {{ item.total_ingresos | number:'1.0-0' }}</span>
                         </div>
-                        <div class="saldo-row">
+                        <div class="saldo-item">
                             <span class="saldo-label">Gastos</span>
-                            <span class="saldo-value gastos">{{ item.total_gastos | currency:'COP':'symbol':'1.0-0' }}</span>
+                            <span class="saldo-value COP">COP {{ item.total_gastos | number:'1.0-0' }}</span>
                         </div>
                     </div>
                     <div class="saldo-card-footer">
                         <span class="saldo-total-label">Neto</span>
                         <span class="saldo-total-value" [ngClass]="item.saldo_total >= 0 ? 'positivo' : 'negativo'">
-                            {{ item.saldo_total | currency:'COP':'symbol':'1.0-0' }}
+                            COP {{ item.saldo_total | number:'1.0-0' }}
                         </span>
                     </div>
                 </div>

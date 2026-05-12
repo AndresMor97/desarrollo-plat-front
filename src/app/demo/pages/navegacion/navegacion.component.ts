@@ -8,6 +8,7 @@ import { EstadisticasComponent } from '../estadisticas/estadisticas.component';
 import { CategoriaComponent } from '../categorias/categoria.component';
 import { AlertsContainerComponent } from '../ui-elements/alerts-container.component';
 import { AuthService } from '../auth/service/auth.service';
+import { ThemeService } from '../service/theme.service';
 
 export type SeccionActiva = 'movimiento' | 'saldo' | 'historial' | 'estadisticas' | 'categorias';
 
@@ -22,7 +23,11 @@ export class NavegacionComponent {
   seccionActiva: SeccionActiva = 'movimiento';
   usuarioNombre: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    public themeService: ThemeService
+  ) {
     this.usuarioNombre = this.authService.getNombre() || '';
   }
 
@@ -33,5 +38,9 @@ export class NavegacionComponent {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

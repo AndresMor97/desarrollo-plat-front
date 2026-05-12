@@ -7,19 +7,20 @@
 
 .estadisticas-container h2 {
   text-align: center;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
 }
 
 .cargando, .vacio {
   text-align: center;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   padding: 2rem;
 }
 
 .resumen-total {
-  background: #2c3e50;
-  color: white;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   padding: 1rem;
   border-radius: 8px;
   display: flex;
@@ -36,10 +37,10 @@
 }
 
 .barra-item {
-  background: white;
+  background: var(--bg-card);
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .barra-info {
@@ -50,15 +51,15 @@
 
 .categoria {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .monto {
-  color: #7f8c8d;
+  color: var(--text-secondary);
 }
 
 .barra-fondo {
-  background: #ecf0f1;
+  background: var(--bg-secondary);
   height: 12px;
   border-radius: 6px;
   overflow: hidden;
@@ -73,7 +74,7 @@
 
 .porcentaje {
   font-size: 0.85rem;
-  color: #95a5a6;
+  color: var(--text-tertiary);
 }
 
 .grafico-container {
@@ -82,10 +83,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .contenido-grafico {
@@ -103,10 +104,10 @@
 .tabla-container {
   flex: 1;
   min-width: 280px;
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
 }
 
 .tabla-estadisticas {
@@ -118,12 +119,12 @@
 .tabla-estadisticas td {
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tabla-estadisticas th {
-  background: #2c3e50;
-  color: white;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -133,7 +134,7 @@
 }
 
 .tabla-estadisticas tbody tr:hover {
-  background: #f8f9fa;
+  background: var(--bg-hover);
 }
 
 .tabla-estadisticas tbody tr:last-child td {

@@ -6,9 +6,16 @@
       <span class="user-name">{{ usuarioNombre }}</span>
     </div>
     <h1 class="app-titulo">💰 My Money</h1>
-    <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
-      <span class="material-symbols-outlined">logout</span>
-    </button>
+    <div class="header-actions">
+      <button class="btn-theme" (click)="toggleTheme()" [title]="themeService.theme() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'">
+        <span class="material-symbols-outlined">
+          {{ themeService.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}
+        </span>
+      </button>
+      <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
+        <span class="material-symbols-outlined">logout</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -39,7 +46,7 @@
     class="nav-btn"
     [class.active]="seccionActiva === 'movimiento'"
     (click)="cambiarSeccion('movimiento')">
-    <span class="material-symbols-outlined">add_card</span>
+    <span class="material-symbols-outlined">add</span>
     <span>Agregar</span>
   </button>
 

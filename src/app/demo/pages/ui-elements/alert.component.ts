@@ -41,27 +41,27 @@ export type AlertType = 'success' | 'danger' | 'warning' | 'info';
     }
 
     .alert-success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      background-color: rgba(39, 174, 96, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(39, 174, 96, 0.3);
     }
 
     .alert-danger {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background-color: rgba(255, 95, 87, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(255, 95, 87, 0.3);
     }
 
     .alert-warning {
-      background-color: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeaa7;
+      background-color: rgba(255, 193, 7, 0.15);
+      color: #ffc107;
+      border: 1px solid rgba(255, 193, 7, 0.3);
     }
 
     .alert-info {
-      background-color: #d1ecf1;
-      color: #0c5460;
-      border: 1px solid #bee5eb;
+      background-color: rgba(23, 162, 184, 0.15);
+      color: #17a2b8;
+      border: 1px solid rgba(23, 162, 184, 0.3);
     }
 
     .btn-close {

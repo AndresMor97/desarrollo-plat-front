@@ -7,7 +7,7 @@
   h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #1d1d1f;
+    color: var(--text-primary);
     margin: 0 0 16px 0;
     letter-spacing: -0.01em;
   }
@@ -15,7 +15,7 @@
 
 .cargando, .vacio {
   text-align: center;
-  color: #86868b;
+  color: var(--text-secondary);
   padding: 40px 20px;
   font-size: 0.9rem;
 }
@@ -30,19 +30,19 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #ffffff;
+  background: var(--bg-card);
   padding: 14px 16px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 
   &.gasto .movimiento-icono {
-    background: #fff2f2;
-    color: #ff3b30;
+    background: rgba(255, 95, 87, 0.15);
+    color: var(--accent-red);
   }
 
   &.ingreso .movimiento-icono {
-    background: #edfcf0;
-    color: #27ae60;
+    background: rgba(39, 174, 96, 0.15);
+    color: var(--accent-green);
   }
 }
 
@@ -69,12 +69,12 @@
 .movimiento-desc {
   font-size: 0.95rem;
   font-weight: 500;
-  color: #1d1d1f;
+  color: var(--text-primary);
 }
 
 .movimiento-fecha {
   font-size: 0.8rem;
-  color: #86868b;
+  color: var(--text-secondary);
 }
 
 .movimiento-monto {
@@ -82,11 +82,11 @@
   font-weight: 600;
 
   &.monto-gasto {
-    color: #ff3b30;
+    color: var(--accent-red);
   }
 
   &.monto-ingreso {
-    color: #27ae60;
+    color: var(--accent-green);
   }
 }
 
@@ -96,12 +96,12 @@
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
-  color: #86868b;
+  color: var(--text-secondary);
   transition: all 0.2s;
 
   &:hover {
-    background: #fff2f2;
-    color: #ff3b30;
+    background: rgba(255, 95, 87, 0.15);
+    color: var(--accent-red);
   }
 
   .material-symbols-outlined {
@@ -115,7 +115,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay-bg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,33 +124,34 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--bg-card);
   border-radius: 16px;
   padding: 24px;
   max-width: 340px;
   width: 100%;
   text-align: center;
+  box-shadow: var(--shadow-md);
 
   h3 {
     margin: 0 0 8px 0;
     font-size: 1.1rem;
-    color: #1d1d1f;
+    color: var(--text-primary);
   }
 
   p {
     margin: 0 0 16px 0;
-    color: #86868b;
+    color: var(--text-secondary);
     font-size: 0.95rem;
   }
 
   .detalle {
-    background: #f5f5f7;
+    background: var(--bg-secondary);
     padding: 12px;
     border-radius: 8px;
     margin-top: 12px;
 
     strong {
-      color: #1d1d1f;
+      color: var(--text-primary);
       display: block;
       margin-bottom: 4px;
     }
@@ -172,22 +173,22 @@
   }
 
   .btn-cancelar {
-    background: #f5f5f7;
+    background: var(--bg-secondary);
     border: none;
-    color: #1d1d1f;
+    color: var(--text-primary);
 
     &:hover {
-      background: #e5e5e7;
+      background: var(--bg-hover);
     }
   }
 
   .btn-confirmar {
-    background: #ff3b30;
+    background: var(--accent-red);
     border: none;
     color: white;
 
     &:hover {
-      background: #d63031;
+      opacity: 0.9;
     }
   }
 }
