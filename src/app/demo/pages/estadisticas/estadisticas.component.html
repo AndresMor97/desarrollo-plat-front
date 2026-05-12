@@ -13,12 +13,33 @@
       <strong>{{ getTotal() | currency:'COP':'symbol':'1.0-0' }}</strong>
     </div>
 
-    <div class="grafico-container">
-      <canvas baseChart
-              [data]="pieChartData"
-              [options]="pieChartOptions"
-              type="pie">
-      </canvas>
+    <div class="contenido-grafico">
+      <div class="grafico-container">
+        <canvas baseChart
+                [data]="pieChartData"
+                [options]="pieChartOptions"
+                type="pie">
+        </canvas>
+      </div>
+
+      <div class="tabla-container">
+        <table class="tabla-estadisticas">
+          <thead>
+            <tr>
+              <th>Categoría</th>
+              <th>Total</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let stat of estadisticas">
+              <td>{{ stat.categoria }}</td>
+              <td>{{ stat.total | currency:'COP':'symbol':'1.0-0' }}</td>
+              <td>{{ getPorcentaje(stat.total) | number:'1.1-1' }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

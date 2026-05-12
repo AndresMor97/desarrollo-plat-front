@@ -102,4 +102,9 @@ export class EstadisticasComponent implements OnInit {
   getTotal(): number {
     return this.estadisticas.reduce((sum, e) => sum + e.total, 0);
   }
+
+  getPorcentaje(valor: number): number {
+    const total = this.getTotal();
+    return total > 0 ? (valor / total) * 100 : 0;
+  }
 }
