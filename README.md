@@ -1,6 +1,5 @@
-# 💰 FinanzasApp - Guía Completa para Desarrolladores
+# 💰 MyMoney - 
 
-> **¿Primera vez? ¿No sabes qué es Angular? Tranquilo, esta guía te explica TODO desde cero.**
 
 ---
 
